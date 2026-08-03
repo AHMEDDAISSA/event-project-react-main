@@ -1,0 +1,71 @@
+import {StyleSheet} from 'react-native';
+
+export default StyleSheet.create({
+  contain: {
+    borderRadius: 10,
+    marginHorizontal: 20,
+    marginVertical: 10,
+    borderWidth: 0.5,
+  },
+  nameContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderTopRightRadius: 8,
+    borderTopLeftRadius: 8,
+  },
+  validContent: {
+    flexDirection: 'row',
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    justifyContent: 'space-between',
+    borderBottomRightRadius: 8,
+    borderBottomLeftRadius: 8,
+  },
+  mainContent: {
+    paddingHorizontal: 12,
+    paddingVertical: 20,
+  },
+  container: {
+    borderRadius: 60,
+    overflow: 'hidden',
+    alignSelf: 'center',
+    marginVertical: 8,
+    marginHorizontal: 15,
+    position: 'relative',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    borderWidth: 0.5,
+    borderRadius: 60,
+  },
+  row: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  status: {padding: 5, borderRadius: 10, color: 'white'},
+  joinButton: {
+    flexDirection: 'row',
+    marginTop:10,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    backgroundColor: '#4CAF50',
+    borderRadius: 8,
+    height: 50,
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  joinButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 14,
+    justifyContent: 'center',
+    paddingHorizontal: 5,
+  },
+});

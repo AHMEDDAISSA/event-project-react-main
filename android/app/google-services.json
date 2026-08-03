@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "104266785934",
+    "project_id": "imcevents-654e3",
+    "storage_bucket": "imcevents-654e3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:104266785934:android:10d3adf8e7c4fcb97415df",
+        "android_client_info": {
+          "package_name": "com.imcevents.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4Dwu35_BlWHkbmNduKozMplfKaY7Nl5Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

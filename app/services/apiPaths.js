@@ -1,0 +1,53 @@
+export const ApiPaths = {
+  // Base URL
+  baseURL: 'https://ditte.creativedms.pro/api/',
+  // baseURL: 'http://192.168.1.15:8000/api/',
+  // API KEY
+  apiKey: '?apikey=taWliVuaVkZHJk0V6g2vCCjk',
+  // API Endpoints
+  loader: 'loader',
+  registerData: 'register/data',
+  login: 'user/login',
+  register: 'user/register',
+  forgetPassword: 'user/forget-password', // Used to change password from server and send it on email to user
+  resetPasswordOtp: 'user/forget-password/otp',
+  resetPassword: 'user/reset-password',
+  getUser: 'user',
+  editProfile: 'user/edit-profile',
+  recommendedExhibitors: 'user/exhibitor/recommended',
+  exhibitorDetails: 'user/exhibitor/detail',
+  addInterest: 'user/exhibitor/add-interest',
+  createMeeting: 'user/meeting/create',
+  myInterstedList: 'user/exhibitor/interested',
+  interestedInYouList: 'user/exhibitor/interested-in-you',
+  recommendedForYouList: 'user/exhibitor/recommended',
+  changePassword: 'user/change-profile-password',
+  ChangeProfileImage: 'user/change-profile-image',
+  meetingSent: 'user/meeting/sent',
+  meetingReceived: 'user/meeting/received',
+  meetingConfirmed: 'user/meeting/confirmed',
+  acceptMeeting: 'user/meeting/accept',
+  refuseMeeting: 'user/meeting/refus',
+  cancelMeeting: 'user/meeting/cancel',
+  markAsRead: 'user/notification/mark-as-read',
+  conference: 'user/conference',
+  addRemoveToSchedule: 'user/conference/join',
+  mySchedule: 'user/conference/mySchedule',
+  exhibitors: 'user/exhibitor',
+  visitors: 'user/visitor',
+  visitorDetails: 'user/visitor/detail',
+  addInterestVisitor: 'user/visitor/add-interest',
+  sponsors: 'user/sponsors',
+  editSpeakers: 'user/edit-speakers',
+
+  // Exhibitor
+  registerExhibitor: 'exhibitor/register',
+  // Virtual Meetings
+  VMeetingSent: 'user/virtual_meeting/sent',
+  VMeetingReceived: 'user/virtual_meeting/received',
+  VMeetingConfirmed: 'user/virtual_meeting/confirmed',
+  createVMeeting: 'user/virtual_meeting/create',
+  acceptVMeeting: 'user/virtual_meeting/accept',
+  refuseVMeeting: 'user/virtual_meeting/refus',
+  cancelVMeeting: 'user/virtual_meeting/cancel',
+};

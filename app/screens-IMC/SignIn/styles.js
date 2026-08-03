@@ -1,0 +1,97 @@
+import {StyleSheet} from 'react-native';
+import {BaseColor} from '../../config';
+import * as Utils from '../../utils';
+
+export default StyleSheet.create({
+  container: { 
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    overflow: 'hidden',
+    shadowColor: 'black',
+    shadowOffset: {width: 1.5, height: 1.5},
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4, 
+    marginHorizontal: 30,
+  },
+  placeholderInput: {
+    paddingLeft: 40,
+    paddingRight: 40,
+  },
+  InputContainer: {
+    position: 'relative',
+  },
+  leftIcon: {
+    position: 'absolute',
+    top: '55%',
+    left: '2%',
+    transform: [{translateY: -10}],
+    zIndex: 1,
+    color: BaseColor.kashmir,
+  },
+  errormessage: {
+    color: '#FF0000',
+    marginTop: 5,
+  },
+  backIcon: {
+    position: 'absolute',
+    left: 10,
+    zIndex: 2,
+    top: '5%',
+  },
+  appLogo: {
+    height: Utils.scaleWithPixel(80),
+    width: Utils.scaleWithPixel(90),
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    marginTop: 30,
+    marginBottom: 40,
+  },
+  textInput: {
+    height: 46,
+    backgroundColor: BaseColor.fieldColor,
+    marginTop: 10,
+    padding: 10,
+    width: '100%',
+  },
+  contain: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+    flex: 1,
+  },
+  InputCard: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 0.5,
+    padding: '5%',
+    marginBottom: 'auto',
+    marginTop: '10%',
+    borderWidth: 2,
+    borderRadius: 10,
+    width: '100%',
+    shadowColor: 'black',
+    shadowOffset: {width: 1.5, height: 1.5},
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
+    elevation: 1,
+  },
+  eyeIconContainer: {
+    position: 'absolute',
+    top: '50%',
+    right: 10,
+    transform: [{translateY: -7}],
+    zIndex: 2,
+  },
+  bottomImage: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: Utils.scaleWithPixel(200),
+    resizeMode: 'cover',
+  },
+});

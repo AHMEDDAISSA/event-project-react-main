@@ -1,0 +1,44 @@
+{
+  "cli": {
+    "version": ">= 16.13.3",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk",
+        "credentialsSource": "local"
+      },
+      "ios": {
+        "simulator": false,
+        "resourceClass": "m-medium",
+        "image": "macos-sequoia-15.5-xcode-26.0"
+      }
+    },
+    "preview": {
+      "android": {
+        "buildType": "apk",
+        "credentialsSource": "local"
+      }
+    },
+    "production": {
+      "android": {
+        "buildType": "app-bundle",
+        "credentialsSource": "local"
+      },
+      "autoIncrement": true,
+      "releaseChannel": "production",
+      "distribution": "store",
+      "ios": {
+        "simulator": false,
+        "resourceClass": "m-medium",
+        "image": "macos-sequoia-15.5-xcode-26.0"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

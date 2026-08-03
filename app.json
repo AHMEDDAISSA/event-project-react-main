@@ -1,0 +1,89 @@
+{
+  "expo": {
+    "name": "IMC Events",
+    "slug": "imc_events",
+    "version": "3.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "bundleIdentifier": "com.imcevents.app",
+      "supportsTablet": true,
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "remote-notification",
+          "fetch"
+        ],
+        "NSCameraUsageDescription": "Cette application utilise l'appareil photo pour prendre des photos que vous pouvez joindre à vos engagements ou demandes. Par exemple, vous pouvez prendre une photo comme preuve lors du dépôt d'une requête.",
+        "NSPhotoLibraryUsageDescription": "Cette application vous permet de sélectionner des photos de votre bibliothèque pour les joindre à vos engagements ou demandes. Par exemple, vous pouvez télécharger une photo comme preuve lors de la soumission d'une requête.",
+        "ITSAppUsesNonExemptEncryption": false
+      },
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "entitlements": {
+        "aps-environment": "production"
+      }
+    },
+    "android": {
+      "package": "com.imcevents.app",
+      "versionCode": 44,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/app-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "googleServicesFile": "./google-services.json",
+      "permissions": [
+        "RECEIVE_BOOT_COMPLETED",
+        "VIBRATE",
+        "WAKE_LOCK"
+      ]
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 24,
+            "compileSdkVersion": 36,
+            "targetSdkVersion": 36,
+            "buildToolsVersion": "34.0.0",
+            "kotlinVersion": "2.1.20",
+            "ndkVersion": "26.1.10909125",
+            "packagingOptions": {
+              "pickFirst": [
+                "**/libc++_shared.so"
+              ]
+            }
+          },
+          "ios": {
+            "useFrameworks": "static",
+            "buildReactNativeFromSource": true,
+            "deploymentTarget": "15.1",
+            "flipper": false,
+            "buildSettings": {
+              "CLANG_WARN_NON_MODULAR_INCLUDE_IN_FRAMEWORK_MODULE": "NO"
+            }
+          }
+        }
+      ],
+      "@react-native-firebase/app",
+      "@react-native-firebase/messaging",
+      "expo-asset",
+      "./plugins/withPatchImports.js",
+      "./plugins/withFirebaseFix.js",
+      "./plugins/withExcludePackages.js",
+      "./plugins/withEnableNewApkCreator.js",
+      "./plugins/withKeystore.js",
+      "./plugins/remove-media-permissions.js"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "4c9acc32-55f1-49d1-a684-79e8ea3945e8"
+      }
+    }
+  }
+}
