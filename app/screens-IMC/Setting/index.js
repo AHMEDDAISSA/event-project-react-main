@@ -29,7 +29,7 @@ export default function Setting({navigation}) {
     ? t('always_off')
     : t('dynamic_system');
 
-  // Handle No Internet Connection
+  // Handle No Internet Connection 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(state => {
       if (!state.isConnected) {

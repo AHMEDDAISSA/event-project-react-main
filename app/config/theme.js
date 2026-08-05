@@ -276,7 +276,14 @@ export const useTheme = () => {
     item => item.theme === (themeStorage ?? DefaultTheme.theme),
   );
 
-  const selectedTheme = theme.light;
+  // force the dark mode 
+  const selectedTheme = forceDark === true
+    ? theme.dark
+    : forceDark === false
+    ? theme.light
+    : isDarkMode
+    ? theme.dark
+    : theme.light;
 
   return {
     theme: {

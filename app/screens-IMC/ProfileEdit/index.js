@@ -1,28 +1,7 @@
-import React, {useState, useEffect} from 'react';
-import {
-  View,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableOpacity,
-  FlatList,
-  ActivityIndicator,
-  Animated,
-  PermissionsAndroid,
-  Linking
-} from 'react-native';
+import React, {useState, useEffect, useCallback} from 'react';
+import {View,ScrollView,KeyboardAvoidingView,Platform,TouchableOpacity,FlatList,ActivityIndicator,Animated,PermissionsAndroid,Linkin} from 'react-native';
 import {BaseStyle, BaseColor, useTheme, FontWeight, Images} from '../../config';
-import {
-  Image,
-  Header,
-  SafeAreaView,
-  Icon,
-  Text,
-  Button,
-  TextInput,
-  SharedModal,
-  MatIcon,
-} from '../../components';
+import {Image,Header,SafeAreaView,Icon,Text,Button,TextInput,SharedModal,MatIcon,} from '../../components';
 import styles from './styles';
 import {useTranslation} from 'react-i18next';
 import {useDispatch, useSelector} from 'react-redux';
