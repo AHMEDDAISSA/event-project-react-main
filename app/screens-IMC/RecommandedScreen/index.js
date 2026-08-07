@@ -27,6 +27,7 @@ import {
   TextInput,
   Pagination,
   ActionButton,
+  IcebreakerCard,
 } from '../../components';
 import styles from './styles';
 import {useTranslation} from 'react-i18next';
@@ -58,9 +59,48 @@ export default function RecommandedScreen({navigation}) {
   
   useAndroidBack();
 
-  const [exhibitors, setExhibitors] = useState([]);
+  // ── DONNÉES DE TEST (remplace par [] quand le vrai backend retourne ai_score) ──
+  const [exhibitors, setExhibitors] = useState([
+    {
+      id: 1,
+      first_name: 'Sophie',
+      last_name: 'Martin',
+      organization_name: 'Accenture',
+      type: 'visitor',
+      ai_score: 82,
+      ai_justification: 'Vous travaillez tous les deux sur la transformation digitale des PME.',
+      ai_icebreaker: "Bonjour Sophie, j'ai vu votre travail sur la digitalisation — c'est exactement notre coeur de métier !",
+      email: 'sophie.martin@accenture.com',
+      followers: '',
+    },
+    {
+      id: 2,
+      first_name: 'Karim',
+      last_name: 'Benali',
+      organization_name: 'TechVentures',
+      type: 'exhibitor',
+      ai_score: 63,
+      ai_justification: 'Intérêt commun pour la fintech et les solutions de paiement mobile.',
+      ai_icebreaker: "Bonjour Karim, votre solution de paiement mobile m'a beaucoup intéressé — on pourrait en parler ?",
+      email: 'k.benali@techventures.io',
+      followers: '',
+    },
+    {
+      id: 3,
+      first_name: 'Léa',
+      last_name: 'Dupont',
+      organization_name: 'InnovateLab',
+      type: 'visitor',
+      ai_score: 41,
+      ai_justification: 'Vous participez tous les deux à des conférences sur l\'IA générative.',
+      ai_icebreaker: "Bonjour Léa, j'ai vu que l'IA générative vous intéresse aussi — qu'en pensez-vous dans votre secteur ?",
+      email: 'lea.dupont@innovatelab.fr',
+      followers: '',
+    },
+  ]);
+  // ────────────────────────────────────────────────────────────────────────────
   const [likedExhibitors, setLikedExhibitors] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [pagination, setPagination] = useState({
     current_page: 1,
@@ -122,70 +162,17 @@ export default function RecommandedScreen({navigation}) {
   };
 
   const renderItem = ({item}) => (
-    <View
-      style={[
-        styles.card,
-        {backgroundColor: colors.card, borderColor: colors.border},
-      ]}>
-      <ProfileDetail
-        image={{uri: item.imagePath}}
-        textFirst={`${item.first_name} ${item.last_name}`}
-        textSecond={item.email}
-        textThird={item.organization_name}
-        style={{paddingHorizontal: 20, paddingVertical: 20}}
-        onPress={() => navigation.navigate('ExhibitorDetail', {id: item.id})}
-      />
-      <View style={styles.contentContact}>
-        <ActionButton
-          icon={likedExhibitors[item.id] ? 'thumb-up' : 'thumb-up-off-alt'}
-          text={t('interested')}
-          onPress={() => toggleLike(item.id)}
-          backgroundColor={
-            likedExhibitors[item.id]
-              ? colors.primary
-              : BaseColor.whiteColor
-          }
-          borderColor={colors.primary}
-          textColor={
-            likedExhibitors[item.id]
-              ? BaseColor.whiteColor
-              : colors.primary
-          }
-          iconColor={
-            likedExhibitors[item.id]
-              ? BaseColor.whiteColor
-              : colors.primary
-          }
-        />
-
-        {permissions?.includes('send_virtuel_meeting_exhibitor') && (
-          <ActionButton
-            icon="laptop"
-            text={t('virtual')}
-            onPress={() =>
-              navigation.navigate('RequestAVMeeting', {exhibitor: item})
-            }
-            backgroundColor={colors.primary}
-            borderColor={colors.primary}
-            textColor={BaseColor.whiteColor}
-            iconColor={BaseColor.whiteColor}
-          />
-        )}
-        {permissions?.includes('send_meeting') && (
-          <ActionButton
-            icon="calendar-month"
-            text={t('meeting')}
-            onPress={() =>
-              navigation.navigate('RequestAmeeting', {exhibitor: item})
-            }
-            backgroundColor={colors.primary}
-            borderColor={colors.primary}
-            textColor={BaseColor.whiteColor}
-            iconColor={BaseColor.whiteColor}
-          />
-        )}
-      </View>
-    </View>
+    <IcebreakerCard
+      name={`${item.first_name} ${item.last_name}`}
+      company={item.organization_name}
+      role={item.type ?? 'exhibitor'}
+      score={item.ai_score ?? 0}
+      justification={item.ai_justification}
+      icebreaker={item.ai_icebreaker}
+      onBookSlot={() =>
+        navigation.navigate('RequestAmeeting', {exhibitor: item})
+      }
+    />
   );
 
   const showInterest = async exhibitorId => {

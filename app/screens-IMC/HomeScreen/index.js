@@ -2,25 +2,14 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { View, FlatList, TouchableOpacity, Image, Animated } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTheme, Images } from '../../config';
-import {
-  SafeAreaView,
-  Icon,
-  Text,
-  Card,
-  HotelItem,
-  ConferenceCard,
-} from '../../components';
+import {SafeAreaView,Icon,Text,Card,HotelItem,ConferenceCard} from '../../components';
 import styles from './styles';
 import * as Utils from '../../utils';
 import { useTranslation } from 'react-i18next';
 import { HotelData } from '../../data';
 import { useDispatch, useSelector } from 'react-redux';
 import { getRecommandedForYou, getExhibitors } from '../../services/homePageService';
-import {
-  getConferencesList,
-  addRemoveToSchedule,
-  getSponsorsList,
-} from '../../services/conferenceService';
+import {getConferencesList,addRemoveToSchedule,getSponsorsList,} from '../../services/conferenceService';
 import { checkAuth } from '../../reducers/authSlice';
 import ToastUtils from "../../config/toastUtils";
 import NetInfo from '@react-native-community/netinfo';

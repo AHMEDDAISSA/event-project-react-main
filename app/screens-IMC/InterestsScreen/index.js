@@ -1,34 +1,14 @@
-import {
-  LayoutAnimation,
-  UIManager,
-  Platform,
-} from 'react-native';
-
+import {LayoutAnimation,UIManager,Platform} from 'react-native';
 if (
   Platform.OS === 'android' &&
   UIManager.setLayoutAnimationEnabledExperimental
 ) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
-
 import React, {useState, useCallback, useEffect} from 'react';
-import {
-  View,
-  FlatList,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from 'react-native';
+import {View,FlatList,TouchableWithoutFeedback,Keyboard} from 'react-native';
 import {BaseColor, BaseStyle, useTheme, Images} from '../../config';
-import {
-  Header,
-  SafeAreaView,
-  Icon,
-  Text,
-  ProfileDetail,
-  TextInput,
-  Pagination,
-  ActionButton,
-} from '../../components';
+import {Header,SafeAreaView,Icon,Text,ProfileDetail,TextInput,Pagination,ActionButton} from '../../components';
 import styles from './styles';
 import {useTranslation} from 'react-i18next';
 import {useFocusEffect} from '@react-navigation/native';
@@ -45,6 +25,15 @@ export default function InterestsScreen({navigation}) {
   const {colors} = useTheme();
   const {t} = useTranslation();
   const {user, type, permissions} = useSelector(state => state.auth);
+
+
+  //observer le text search
+  useEffect(() => {
+  const timeoutId = setTimeout(() => {
+    fetchInterests(1, searchText);
+  }, 500); 
+  return () => clearTimeout(timeoutId); 
+}, [searchText]);
 
   // Handle No Internet Connection
   useEffect(() => {
@@ -73,10 +62,10 @@ export default function InterestsScreen({navigation}) {
   useAndroidBack();
 
   useFocusEffect(
-    useCallback(() => {
-      fetchInterests(pagination.current_page);
-    }, []),
-  );
+  useCallback(() => {
+    fetchInterests(pagination.current_page, searchText);
+  }, []),
+);
 
   const fetchInterests = async (page, searchText) => {
     setExhibitors([]);
@@ -452,14 +441,14 @@ export default function InterestsScreen({navigation}) {
   };
 
   const handlePageChange = async page => {
-    if (page > 0 && page <= pagination.total) {
-      setPagination(prev => ({
-        ...prev,
-        current_page: page,
-      }));
-    }
-    await fetchInterests(page);
-  };
+  if (page > 0 && page <= pagination.last_page) {
+    setPagination(prev => ({
+      ...prev,
+      current_page: page,
+    }));
+    await fetchInterests(page, searchText);
+  }
+};
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -500,6 +489,7 @@ export default function InterestsScreen({navigation}) {
                 color={colors.primary}
                 style={{marginRight: 10}}
               />
+              
             }
           />
           {loading ? (

@@ -5,7 +5,7 @@ const HotelData = [
     id: '1',
     image: Images.room1,
     name: 'Boston Hotel',
-    location: '553 Gislason Radial',
+    location: '555 Gislason Radial',
     price: '$125',
     available: 'Book 2 nights get free Breakfast',
     rate: 4.5,

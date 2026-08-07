@@ -53,6 +53,7 @@ import Pagination from './Pagination';
 import NoInternet from './NoInternet';
 import ConferenceItem from './ConferenceItem';
 import ActionButton from './ActionButton';
+import IcebreakerCard from './IcebreakerCard';
 
 export {
   BusPlan,
@@ -110,4 +111,5 @@ export {
   NoInternet,
   ConferenceItem,
   ActionButton,
+  IcebreakerCard,
 };
