@@ -493,5 +493,15 @@
   "speaker_post": "وظيفة",
   "gallery": "معرض الصور",
   "camera": "آلة تصوير",
-  "speakers_updated_successfully": "تم تحديث قائمة المتحدثين بنجاح"
+  "speakers_updated_successfully": "تم تحديث قائمة المتحدثين بنجاح",
+  "score_high_compatibility": "توافق عالي",
+  "score_good_compatibility": "توافق جيد",
+  "score_moderate_compatibility": "توافق معتدل",
+  "exhibitor_label": "عارض",
+  "visitor_label": "زائر",
+  "icebreaker_how_to_approach": "كيفية التقريب",
+  "icebreaker_copy": "نسخ",
+  "icebreaker_copied": "تم النسخ",
+  "icebreaker_copy_accessibility": "نسخ جملة الافتتاح",
+  "icebreaker_book_slot": "حجز موعد"
 }

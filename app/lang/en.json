@@ -493,5 +493,15 @@
   "speaker_post": "Role",
   "gallery": "Gallery",
   "camera": "Camera",
-  "speakers_updated_successfully": "Speakers list updated successfully"
+  "speakers_updated_successfully": "Speakers list updated successfully",
+  "score_high_compatibility": "High compatibility",
+  "score_good_compatibility": "Good compatibility",
+  "score_moderate_compatibility": "Moderate compatibility",
+  "exhibitor_label": "Exhibitor",
+  "visitor_label": "Visitor",
+  "icebreaker_how_to_approach": "How to approach",
+  "icebreaker_copy": "Copy",
+  "icebreaker_copied": "Copied",
+  "icebreaker_copy_accessibility": "Copy opening line",
+  "icebreaker_book_slot": "Book a slot"
 }

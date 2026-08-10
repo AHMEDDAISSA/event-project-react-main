@@ -13,29 +13,37 @@ export default function ActionButton(props) {
     onPress,
     backgroundColor,
     borderColor,
+    borderBottomColor,
     textColor,
     iconColor,
+    style,
   } = props;
+
+  const bg = backgroundColor || colors.primary;
+  const bColor = borderColor || bg;
+  const bbColor = borderBottomColor || '#3730A3';
 
   return (
     <TouchableOpacity
-      activeOpacity={0.8}
+      activeOpacity={0.85}
       onPress={onPress}
       style={[
         styles.actionButton,
         {
-          backgroundColor,
-          borderColor,
+          backgroundColor: bg,
+          borderColor: bColor,
+          borderBottomColor: bbColor,
         },
+        style,
       ]}
     >
-      <Icon name={icon} size={15} color={iconColor} enableRTL={true} />
+      <Icon name={icon} size={16} color={iconColor || '#FFFFFF'} enableRTL={true} />
 
       <Text
         numberOfLines={1}
         adjustsFontSizeToFit
         minimumFontScale={0.8}
-        style={[styles.actionButtonText, { color: textColor }]}
+        style={[styles.actionButtonText, { color: textColor || '#FFFFFF' }]}
       >
         {text}
       </Text>
