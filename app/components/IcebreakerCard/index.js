@@ -11,9 +11,8 @@
  * @param {number}   props.score         - AI compatibility score between 0 and 100
  * @param {string}   props.justification - One-sentence AI justification (common ground)
  * @param {string}   props.icebreaker    - Suggested opening sentence to break the ice
- * @param {function} props.onBookSlot    - Callback when the user taps "Reserver un creneau"
+ * @param {function} props.onBookSlot    - Callback when the user taps "Book a slot"
  */
-
 import React, { useRef, useState } from 'react';
 import {
   View,
@@ -24,6 +23,8 @@ import {
   Platform,
 } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
+import { useTranslation } from 'react-i18next';
+import { useTheme } from '../../config';
 
 // Score helpers
 
@@ -33,16 +34,16 @@ function getScoreColor(score) {
   return '#94A3B8';
 }
 
-function getScoreLabel(score) {
-  if (score > 75) return 'Forte compatibilité';
-  if (score >= 50) return 'Bonne compatibilité';
-  return 'Compatibilité modérée';
+function getScoreLabel(score, t) {
+  if (score > 75) return t('score_high_compatibility');
+  if (score >= 50) return t('score_good_compatibility');
+  return t('score_moderate_compatibility');
 }
 
-function getRoleMeta(role) {
+function getRoleMeta(role, t) {
   const isExhibitor = String(role).toLowerCase() === 'exhibitor';
   return {
-    label: isExhibitor ? 'Exposant' : 'Visiteur',
+    label: isExhibitor ? t('exhibitor_label') : t('visitor_label'),
     bg: isExhibitor ? '#EDE9FE' : '#E0F2FE',
     text: isExhibitor ? '#6D28D9' : '#0369A1',
   };
@@ -60,13 +61,15 @@ export default function IcebreakerCard({
   icebreaker,
   onBookSlot,
 }) {
+  const { t } = useTranslation();
+  const { colors } = useTheme();
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const [copied, setCopied] = useState(false);
 
   const safeScore = typeof score === 'number' ? Math.max(0, Math.min(100, score)) : 0;
   const scoreColor = getScoreColor(safeScore);
-  const scoreLabel = getScoreLabel(safeScore);
-  const roleMeta = getRoleMeta(role);
+  const scoreLabel = getScoreLabel(safeScore, t);
+  const roleMeta = getRoleMeta(role, t);
 
   const handleCopy = async () => {
     if (!icebreaker) return;
@@ -83,7 +86,7 @@ export default function IcebreakerCard({
   const barWidth = safeScore + '%';
 
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <View style={[styles.avatar, { backgroundColor: scoreColor + '22' }]}>
@@ -92,8 +95,8 @@ export default function IcebreakerCard({
             </Text>
           </View>
           <View style={styles.nameBlock}>
-            <Text style={styles.name} numberOfLines={1}>{name || '-'}</Text>
-            <Text style={styles.company} numberOfLines={1}>{company || '-'}</Text>
+            <Text style={[styles.name, { color: colors.text }]} numberOfLines={1}>{name || '-'}</Text>
+            <Text style={[styles.company, { color: colors.text + '99' }]} numberOfLines={1}>{company || '-'}</Text>
           </View>
         </View>
         <View style={[styles.roleBadge, { backgroundColor: roleMeta.bg }]}>
@@ -103,44 +106,44 @@ export default function IcebreakerCard({
 
       <View style={styles.scoreSection}>
         <View style={styles.scoreRow}>
-          <View style={[styles.scoreBadge, { borderColor: scoreColor }]}>
+          <View style={[styles.scoreBadge, { borderColor: scoreColor, backgroundColor: colors.background }]}>
             <Text style={[styles.scoreNumber, { color: scoreColor }]}>{safeScore}</Text>
             <Text style={[styles.scoreMax, { color: scoreColor }]}>/100</Text>
           </View>
           <View style={styles.scoreMeta}>
             <Text style={[styles.scoreLabel, { color: scoreColor }]}>{scoreLabel}</Text>
-            <View style={styles.progressTrack}>
+            <View style={[styles.progressTrack, { backgroundColor: colors.border }]}>
               <View style={[styles.progressFill, { width: barWidth, backgroundColor: scoreColor }]} />
             </View>
           </View>
         </View>
       </View>
 
-      <View style={styles.divider} />
+      <View style={[styles.divider, { backgroundColor: colors.border }]} />
 
       {justification ? (
         <View style={styles.justificationRow}>
           <Text style={styles.sparkleIcon}>{SPARKLE}</Text>
-          <Text style={styles.justificationText}>{justification}</Text>
+          <Text style={[styles.justificationText, { color: colors.text }]}>{justification}</Text>
         </View>
       ) : null}
 
       {icebreaker ? (
-        <View style={styles.icebreakerBox}>
+        <View style={[styles.icebreakerBox, { backgroundColor: colors.background, borderLeftColor: colors.primary }]}>
           <View style={styles.icebreakerHeader}>
-            <Text style={styles.icebreakerTitle}>Comment aborder</Text>
+            <Text style={[styles.icebreakerTitle, { color: colors.primary }]}>{t('icebreaker_how_to_approach')}</Text>
             <TouchableOpacity
-              style={[styles.copyButton, copied && styles.copyButtonActive]}
+              style={[styles.copyButton, { borderColor: colors.primary, backgroundColor: colors.card }, copied && { backgroundColor: colors.primary }]}
               onPress={handleCopy}
               activeOpacity={0.75}
-              accessibilityLabel="Copier la phrase d'ouverture"
+              accessibilityLabel={t('icebreaker_copy_accessibility')}
             >
-              <Text style={[styles.copyButtonText, copied && styles.copyButtonTextActive]}>
-                {copied ? '\u2713 Copie' : COPY_ICON + ' Copier'}
+              <Text style={[styles.copyButtonText, { color: colors.primary }, copied && { color: '#FFFFFF' }]}>
+                {copied ? '\u2713 ' + t('icebreaker_copied') : COPY_ICON + ' ' + t('icebreaker_copy')}
               </Text>
             </TouchableOpacity>
           </View>
-          <Text style={styles.icebreakerContent}>{icebreaker}</Text>
+          <Text style={[styles.icebreakerContent, { color: colors.text }]}>{icebreaker}</Text>
         </View>
       ) : null}
 
@@ -151,10 +154,10 @@ export default function IcebreakerCard({
           onPressIn={onPressIn}
           onPressOut={onPressOut}
           activeOpacity={0.9}
-          accessibilityLabel="Réserver un créneau"
+          accessibilityLabel={t('icebreaker_book_slot')}
           accessibilityRole="button"
         >
-          <Text style={styles.ctaText}>Réserver un créneau</Text>
+          <Text style={styles.ctaText}>{t('icebreaker_book_slot')}</Text>
         </TouchableOpacity>
       </Animated.View>
     </View>
