@@ -175,22 +175,11 @@ export default function InterestsScreen({navigation}) {
           icon={likedVisitors[item.id] ? 'thumb-up' : 'thumb-up-off-alt'}
           text={t('not_interested')}
           onPress={() => toggleLike(item.id, item.type)}
-          backgroundColor={
-            likedVisitors[item.id]
-              ? colors.primary
-              : BaseColor.whiteColor
-          }
-          borderColor={colors.primary}
-          textColor={
-            likedVisitors[item.id]
-              ? BaseColor.whiteColor
-              : colors.primary
-          }
-          iconColor={
-            likedVisitors[item.id]
-              ? BaseColor.whiteColor
-              : colors.primary
-          }
+          backgroundColor="#4F46E5"
+          borderColor="#4F46E5"
+          borderBottomColor="#3730A3"
+          textColor="#FFFFFF"
+          iconColor="#FFFFFF"
         />
 
         {permissions?.includes('send_virtuel_meeting_exhibitor') && (
@@ -200,10 +189,11 @@ export default function InterestsScreen({navigation}) {
             onPress={() =>
               navigation.navigate('RequestAVMeeting', {exhibitor: item})
             }
-            backgroundColor={colors.primary}
-            borderColor={colors.primary}
-            textColor={BaseColor.whiteColor}
-            iconColor={BaseColor.whiteColor}
+            backgroundColor="#4F46E5"
+            borderColor="#4F46E5"
+            borderBottomColor="#3730A3"
+            textColor="#FFFFFF"
+            iconColor="#FFFFFF"
           />
         )}
 
@@ -214,10 +204,11 @@ export default function InterestsScreen({navigation}) {
             onPress={() =>
               navigation.navigate('RequestAmeeting', {exhibitor: item})
             }
-            backgroundColor={colors.primary}
-            borderColor={colors.primary}
-            textColor={BaseColor.whiteColor}
-            iconColor={BaseColor.whiteColor}
+            backgroundColor="#4F46E5"
+            borderColor="#4F46E5"
+            borderBottomColor="#3730A3"
+            textColor="#FFFFFF"
+            iconColor="#FFFFFF"
           />
         )}
       </View>
@@ -253,22 +244,11 @@ export default function InterestsScreen({navigation}) {
           icon={likedExhibitors[item.id] ? 'thumb-up' : 'thumb-up-off-alt'}
           text={t('not_interested')}
           onPress={() => toggleLike(item.id, item.type)}
-          backgroundColor={
-            likedExhibitors[item.id]
-              ? colors.primary
-              : BaseColor.whiteColor
-          }
-          borderColor={colors.primary}
-          textColor={
-            likedExhibitors[item.id]
-              ? BaseColor.whiteColor
-              : colors.primary
-          }
-          iconColor={
-            likedExhibitors[item.id]
-              ? BaseColor.whiteColor
-              : colors.primary
-          }
+          backgroundColor="#4F46E5"
+          borderColor="#4F46E5"
+          borderBottomColor="#3730A3"
+          textColor="#FFFFFF"
+          iconColor="#FFFFFF"
         />
 
         {permissions?.includes('send_virtuel_meeting_exhibitor') && (
@@ -278,10 +258,11 @@ export default function InterestsScreen({navigation}) {
             onPress={() =>
               navigation.navigate('RequestAVMeeting', {exhibitor: item, isExhibitor: item.type == 'exhibitor'})
             }
-            backgroundColor={colors.primary}
-            borderColor={colors.primary}
-            textColor={BaseColor.whiteColor}
-            iconColor={BaseColor.whiteColor}
+            backgroundColor="#4F46E5"
+            borderColor="#4F46E5"
+            borderBottomColor="#3730A3"
+            textColor="#FFFFFF"
+            iconColor="#FFFFFF"
           />
         )}
 
@@ -292,10 +273,11 @@ export default function InterestsScreen({navigation}) {
             onPress={() =>
               navigation.navigate('RequestAmeeting', {exhibitor: item, isExhibitor: item.type == 'exhibitor'})
             }
-            backgroundColor={colors.primary}
-            borderColor={colors.primary}
-            textColor={BaseColor.whiteColor}
-            iconColor={BaseColor.whiteColor}
+            backgroundColor="#4F46E5"
+            borderColor="#4F46E5"
+            borderBottomColor="#3730A3"
+            textColor="#FFFFFF"
+            iconColor="#FFFFFF"
           />
         )}
       </View>

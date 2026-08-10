@@ -22,7 +22,8 @@ import {
 } from '../../components';
 import styles from './styles';
 import {useTranslation} from 'react-i18next';
-import {createMeeting} from '../../services/homePageService';
+import {createMeeting, addInterest} from '../../services/homePageService';
+import {CommonActions} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import ToastUtils from "../../config/toastUtils";
 import NetInfo from '@react-native-community/netinfo';
@@ -31,7 +32,7 @@ import LottieView from 'lottie-react-native';
 import useAndroidBack from '../../hooks/useAndroidBack';
 
 export default function RequestAmeeting({navigation, route}) {
-  const {exhibitor, isExhibitor} = route.params;
+  const {exhibitor, isExhibitor, fromRecommended} = route.params;
   const {colors} = useTheme();
   const {t} = useTranslation();
   const {user, type} = useSelector(state => state.auth);
@@ -191,68 +192,92 @@ export default function RequestAmeeting({navigation, route}) {
   };
 
   const sendRequestMeeting = async () => {
+    console.log('[RequestAmeeting] sendRequestMeeting called');
+    console.log('[RequestAmeeting] selectedDate:', selectedDate);
+    console.log('[RequestAmeeting] selectedTime:', selectedTime);
+    console.log('[RequestAmeeting] fromRecommended:', fromRecommended);
+    console.log('[RequestAmeeting] exhibitor.id:', exhibitor?.id);
+
     if (!selectedDate) {
-      ToastUtils.showErrorToast(
-        `${t('error')}`,
-        t('choose_date'),
+      ToastUtils.showErrorToast(`${t('error')}`, t('choose_date'));
+      return;
+    }
+    if (!selectedTime) {
+      ToastUtils.showErrorToast(`${t('error')}`, t('choose_time'));
+      return;
+    }
+
+    try {
+      setLoading(true);
+      var meetingType = 'visitor_to_exhibitor';
+      if (type == 'visitor') {
+        meetingType = 'visitor_to_exhibitor';
+      } else if (type == 'exhibitor' && isExhibitor) {
+        meetingType = 'exhibitor_to_exhibitor';
+      } else if (type == 'exhibitor' && !isExhibitor) {
+        meetingType = 'exhibitor_to_visitor';
+      }
+
+      console.log('[RequestAmeeting] calling createMeeting with type:', meetingType);
+      const apiResponse = await createMeeting(
+        exhibitor.id,
+        selectedDate,
+        selectedTime,
+        selectedSpeaker,
+        location,
+        description,
+        meetingType
       );
-    } else if (!selectedTime) {
-      ToastUtils.showErrorToast(
-        `${t('error')}`,
-        t('choose_time'),
-      );
-    } else {
-      try {
-        setLoading(true);
-        var meetingType = 'visitor_to_exhibitor';
-        if (type == 'visitor') {
-          // Visitor to exhibitor
-          meetingType = 'visitor_to_exhibitor';
-        }else if (type == 'exhibitor' && isExhibitor){
-          // exhibitor to exhibitor 
-          meetingType = 'exhibitor_to_exhibitor';
-        }else if (type == 'exhibitor' && !isExhibitor){
-          // exhibitor to visitor
-          meetingType = 'exhibitor_to_visitor';
+      console.log('[RequestAmeeting] apiResponse code:', apiResponse?.code);
+      console.log('[RequestAmeeting] apiResponse full:', JSON.stringify(apiResponse));
+
+      if (apiResponse?.code == 200) {
+        setLoading(false);
+
+        // If coming from Recommended: also add to interests so card appears in InterestsScreen
+        if (fromRecommended) {
+          try {
+            await addInterest(exhibitor.id);
+            console.log('[RequestAmeeting] addInterest called for exhibitor:', exhibitor.id);
+          } catch (e) {
+            console.warn('[RequestAmeeting] addInterest error (non-blocking):', e);
+          }
         }
-        const apiResponse = await createMeeting(
-          exhibitor.id,
-          selectedDate,
-          selectedTime,
-          selectedSpeaker,
-          location,
-          description,
-          meetingType
+
+        ToastUtils.showSuccessToast(
+          `${t('success')}`,
+          t('request_meeting_success'),
         );
-        console.log('Create meeting apiResponse', apiResponse);
-  
-        if (apiResponse?.code == 200) {
-          setLoading(false);
-          navigation.goBack();
-          ToastUtils.showSuccessToast(
-            `${t('success')}`,
-            t('request_meeting_success'),
-          );
-        } else if(apiResponse.code == 403) {
-          ToastUtils.showErrorToast(
-            `${t('error')}`,
-            `${t(apiResponse?.message)}`,
-          );
-        } else {
-          setLoading(false);
-          ToastUtils.showErrorToast(
-            `${t('error')}`,
-            t(apiResponse?.message ?? 'Something_went_wrong'),
-          );
-        }
-      } catch (error) {
-        console.error('Error createMeeting:', error);
+
+        // Navigate to InterestsScreen tab using CommonActions (most reliable method)
+        navigation.dispatch(
+          CommonActions.navigate({
+            name: 'BottomTabNavigator',
+            params: { screen: 'InterestsScreen' },
+          })
+        );
+
+      } else if (apiResponse?.code == 403) {
         setLoading(false);
         ToastUtils.showErrorToast(
           `${t('error')}`,
-          t('Something_went_wrong'),
+          `${t(apiResponse?.message)}`,
+        );
+      } else {
+        setLoading(false);
+        console.log('[RequestAmeeting] API error, code:', apiResponse?.code);
+        ToastUtils.showErrorToast(
+          `${t('error')}`,
+          t(apiResponse?.message ?? 'Something_went_wrong'),
         );
       }
+    } catch (error) {
+      console.error('[RequestAmeeting] Error createMeeting:', error);
+      setLoading(false);
+      ToastUtils.showErrorToast(
+        `${t('error')}`,
+        t('Something_went_wrong'),
+      );
     }
   };
 

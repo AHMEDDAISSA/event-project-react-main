@@ -185,22 +185,10 @@ export default function InterestedInYouScreen({navigation}) {
           icon={likedVisitors[item.id] ? 'thumb-up' : 'thumb-up-off-alt'}
           text={likedVisitors[item.id] ? t('not_interested') : t('interested')}
           onPress={() => toggleLike(item.id)}
-          backgroundColor={
-            likedVisitors[item.id]
-              ? colors.primary
-              : BaseColor.whiteColor
-          }
+          backgroundColor={colors.primary}
           borderColor={colors.primary}
-          textColor={
-            likedVisitors[item.id]
-              ? BaseColor.whiteColor
-              : colors.primary
-          }
-          iconColor={
-            likedVisitors[item.id]
-              ? BaseColor.whiteColor
-              : colors.primary
-          }
+          textColor={BaseColor.whiteColor}
+          iconColor={BaseColor.whiteColor}
         />
         {permissions?.includes('send_virtuel_meeting_exhibitor') && (
           <ActionButton
@@ -261,22 +249,10 @@ export default function InterestedInYouScreen({navigation}) {
           icon={likedExhibitors[item.id] ? 'thumb-up' : 'thumb-up-off-alt'}
           text={likedExhibitors[item.id] ? t('not_interested') : t('interested')}
           onPress={() => toggleLike(item.id, item.type)}
-          backgroundColor={
-            likedExhibitors[item.id]
-              ? colors.primary
-              : BaseColor.whiteColor
-          }
+          backgroundColor={colors.primary}
           borderColor={colors.primary}
-          textColor={
-            likedExhibitors[item.id]
-              ? BaseColor.whiteColor
-              : colors.primary
-          }
-          iconColor={
-            likedExhibitors[item.id]
-              ? BaseColor.whiteColor
-              : colors.primary
-          }
+          textColor={BaseColor.whiteColor}
+          iconColor={BaseColor.whiteColor}
         />
         {permissions?.includes('send_virtuel_meeting_exhibitor') && (
           <ActionButton

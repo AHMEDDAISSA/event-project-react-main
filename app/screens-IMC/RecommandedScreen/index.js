@@ -161,6 +161,18 @@ export default function RecommandedScreen({navigation}) {
     }
   };
 
+  const removeExhibitorFromList = (exhibitorId) => {
+    LayoutAnimation.configureNext({
+      duration: 400,
+      update: { type: LayoutAnimation.Types.easeInEaseOut },
+      delete: {
+        type: LayoutAnimation.Types.easeInEaseOut,
+        property: LayoutAnimation.Properties.opacity,
+      },
+    });
+    setExhibitors(prev => prev.filter(item => item.id !== exhibitorId));
+  };
+
   const renderItem = ({item}) => (
     <IcebreakerCard
       name={`${item.first_name} ${item.last_name}`}
@@ -170,7 +182,10 @@ export default function RecommandedScreen({navigation}) {
       justification={item.ai_justification}
       icebreaker={item.ai_icebreaker}
       onBookSlot={() =>
-        navigation.navigate('RequestAmeeting', {exhibitor: item})
+        navigation.navigate('RequestAmeeting', {
+          exhibitor: item,
+          fromRecommended: true,
+        })
       }
     />
   );
