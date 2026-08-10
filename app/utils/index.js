@@ -102,6 +102,19 @@ export const reloadLocale = (oldLanguage, newLanguage) => {
   const newStyle = isLanguageRTL(newLanguage);
   if (oldStyle !== newStyle) {
     I18nManager.forceRTL(newStyle);
-    RNRestart.Restart();
+    if (RNRestart && typeof RNRestart.Restart === 'function') {
+      try {
+        RNRestart.Restart();
+      } catch (err) {
+        console.warn('RNRestart failed:', err);
+      }
+    } else {
+      try {
+        const Updates = require('expo-updates');
+        Updates.reloadAsync();
+      } catch (e) {
+        console.log('App restart is not supported in Expo Go environment');
+      }
+    }
   }
 };
