@@ -40,6 +40,7 @@ import ToastUtils from "../../config/toastUtils";
 import NetInfo from '@react-native-community/netinfo';
 import useAndroidBack from '../../hooks/useAndroidBack';
 
+
 export default function RecommandedScreen({navigation}) {
   const {colors} = useTheme();
   const {t} = useTranslation();
@@ -59,44 +60,9 @@ export default function RecommandedScreen({navigation}) {
   
   useAndroidBack();
 
-  // ── DONNÉES DE TEST (remplace par [] quand le vrai backend retourne ai_score) ──
+  // en ajoutant des val de tests
   const [exhibitors, setExhibitors] = useState([
-    {
-      id: 1,
-      first_name: 'Sophie',
-      last_name: 'Martin',
-      organization_name: 'Accenture',
-      type: 'visitor',
-      ai_score: 82,
-      ai_justification: 'Vous travaillez tous les deux sur la transformation digitale des PME.',
-      ai_icebreaker: "Bonjour Sophie, j'ai vu votre travail sur la digitalisation — c'est exactement notre coeur de métier !",
-      email: 'sophie.martin@accenture.com',
-      followers: '',
-    },
-    {
-      id: 2,
-      first_name: 'Karim',
-      last_name: 'Benali',
-      organization_name: 'TechVentures',
-      type: 'exhibitor',
-      ai_score: 63,
-      ai_justification: 'Intérêt commun pour la fintech et les solutions de paiement mobile.',
-      ai_icebreaker: "Bonjour Karim, votre solution de paiement mobile m'a beaucoup intéressé — on pourrait en parler ?",
-      email: 'k.benali@techventures.io',
-      followers: '',
-    },
-    {
-      id: 3,
-      first_name: 'Léa',
-      last_name: 'Dupont',
-      organization_name: 'InnovateLab',
-      type: 'visitor',
-      ai_score: 41,
-      ai_justification: 'Vous participez tous les deux à des conférences sur l\'IA générative.',
-      ai_icebreaker: "Bonjour Léa, j'ai vu que l'IA générative vous intéresse aussi — qu'en pensez-vous dans votre secteur ?",
-      email: 'lea.dupont@innovatelab.fr',
-      followers: '',
-    },
+    //  
   ]);
   // ────────────────────────────────────────────────────────────────────────────
   const [likedExhibitors, setLikedExhibitors] = useState({});
@@ -175,7 +141,15 @@ export default function RecommandedScreen({navigation}) {
 
   const renderItem = ({item}) => (
     <IcebreakerCard
-      name={`${item.first_name} ${item.last_name}`}
+      image={item.imagePath ? {uri: item.imagePath} : Images.profile2}
+      onPressProfile={() => {
+        if (item.type === 'visitor') {
+          navigation.navigate('VisitorDetail', {id: item.id});
+        } else {
+          navigation.navigate('ExhibitorDetail', {id: item.id});
+        }
+      }}
+      name={`${item.first_name || ''} ${item.last_name || ''}`.trim()}
       company={item.organization_name}
       role={item.type ?? 'exhibitor'}
       score={item.ai_score ?? 0}

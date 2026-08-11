@@ -25,6 +25,7 @@ import {
 import * as Clipboard from 'expo-clipboard';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../config';
+import ProfileDetail from '../ProfileDetail';
 
 // Score helpers
 
@@ -53,12 +54,14 @@ const SPARKLE = '\u2736';
 const COPY_ICON = '\u2398';
 
 export default function IcebreakerCard({
+  image,
   name,
   company,
   role,
   score,
   justification,
   icebreaker,
+  onPressProfile,
   onBookSlot,
 }) {
   const { t } = useTranslation();
@@ -89,15 +92,14 @@ export default function IcebreakerCard({
     <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <View style={[styles.avatar, { backgroundColor: scoreColor + '22' }]}>
-            <Text style={[styles.avatarText, { color: scoreColor }]}>
-              {(name || '?').charAt(0).toUpperCase()}
-            </Text>
-          </View>
-          <View style={styles.nameBlock}>
-            <Text style={[styles.name, { color: colors.text }]} numberOfLines={1}>{name || '-'}</Text>
-            <Text style={[styles.company, { color: colors.text + '99' }]} numberOfLines={1}>{company || '-'}</Text>
-          </View>
+          <ProfileDetail
+            image={image}
+            textFirst={name || '-'}
+            textSecond={company || '-'}
+            isExhibitor={String(role).toLowerCase() === 'exhibitor'}
+            onPress={onPressProfile}
+            style={{ flex: 1, padding: 0 }}
+          />
         </View>
         <View style={[styles.roleBadge, { backgroundColor: roleMeta.bg }]}>
           <Text style={[styles.roleText, { color: roleMeta.text }]}>{roleMeta.label}</Text>
