@@ -801,7 +801,7 @@ export default function SignUpExhibitor({navigation}) {
                           justifyContent: 'space-between',
                           width: '100%',
                         }}>
-                        <InputFieldIcon icon={'phone'} />
+                        {/* <InputFieldIcon icon={'phone'} /> */}
                         <TouchableOpacity
                           onPress={() => {
                             Keyboard.dismiss();

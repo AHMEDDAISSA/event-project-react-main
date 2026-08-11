@@ -1,5 +1,5 @@
-import {Dimensions, StyleSheet} from 'react-native';
-import {BaseColor} from '../../config';
+import { Dimensions, StyleSheet } from 'react-native';
+import { BaseColor } from '../../config';
 
 const height = Dimensions.get('window').height;
 
@@ -10,7 +10,7 @@ export default StyleSheet.create({
   },
   content: {
     width: '100%',
-    maxHeight: height * 0.7,
+    maxHeight: height * 0.5,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
     paddingHorizontal: 20,

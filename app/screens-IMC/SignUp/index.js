@@ -1,41 +1,50 @@
-import React, {useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import {
-  View, 
-  KeyboardAvoidingView, 
-  Platform, 
-  TouchableWithoutFeedback, 
-  Keyboard, 
-  ScrollView, 
-  Image, 
-  TouchableOpacity, 
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
+  ScrollView,
+  Image,
+  TouchableOpacity,
   FlatList,
   PermissionsAndroid,
   Animated,
   Linking,
 } from 'react-native';
-import {BaseStyle, BaseColor, useTheme, Images, FontWeight} from '../../config';
-import {Header, SafeAreaView, Icon, Button, TextInput, Text, SharedModal, MatIcon} from '../../components';
+import { BaseStyle, BaseColor, useTheme, Images, FontWeight } from '../../config';
+import { Header, SafeAreaView, Icon, Button, TextInput, Text, SharedModal, MatIcon } from '../../components';
 import styles from './styles';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRegisterDataThunk, register, resetRegisterState } from '../../reducers/registerDataSlice';
 import { useFocusEffect } from '@react-navigation/native';
-import {Dialog, ALERT_TYPE} from 'react-native-alert-notification';
+import { Dialog, ALERT_TYPE } from 'react-native-alert-notification';
 import LottieView from 'lottie-react-native';
 import * as ImagePicker from "expo-image-picker";
 import ToastUtils from "../../config/toastUtils";
 
-export default function SignUp({navigation}) {
+const getFlagEmoji = (isoCode) => {
+  if (!isoCode) return '';
+  const codePoints = isoCode
+    .toUpperCase()
+    .split('')
+    .map(char => 127397 + char.charCodeAt());
+  return String.fromCodePoint(...codePoints);
+};
+
+export default function SignUp({ navigation }) {
   const dispatch = useDispatch();
   const registerDataState = useSelector((state) => state.registerData);
-  const { 
-    data, 
-    loading, 
-    error, 
-    registerLoading, 
-    registerError, 
-    registerSuccess, 
-    registerResponse 
+  const {
+    data,
+    loading,
+    error,
+    registerLoading,
+    registerError,
+    registerSuccess,
+    registerResponse
   } = registerDataState || {};
 
   useFocusEffect(
@@ -60,17 +69,17 @@ export default function SignUp({navigation}) {
       hideSubscription.remove();
     };
   }, []);
-  
+
   // Initialize Data of Bottom modals 
   const [visitorTypes, setVisitorTypes] = useState([]);
   const [countryCodes, setCountryCodes] = useState([]);
-  const [countryCode, setCountryCode] = useState({iso: '', phonecode: '00'});
+  const [countryCode, setCountryCode] = useState({ iso: '', phonecode: '00' });
   const [categories, setCategories] = useState([]);
   const [jobFunctionList, setJobFunctionList] = useState([]);
   const [jobTitleList, setJobTitleList] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   // Filter List of countries to get easy the coutry code
-  const filteredCountries = useMemo(() => 
+  const filteredCountries = useMemo(() =>
     countryCodes.filter(item =>
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.phonecode.toString().includes(searchQuery)
@@ -85,9 +94,9 @@ export default function SignUp({navigation}) {
       setCategories(data?.requestData?.category);
     }
   }, [data?.requestData]);
-  
-  const {theme, colors} = useTheme();
-  const {t} = useTranslation();
+
+  const { theme, colors } = useTheme();
+  const { t } = useTranslation();
   const [step, setStep] = useState(1);
   // Ref for the ScrollView : used to scroll screen to top when clicking on input
   const scrollViewRef = useRef(null);
@@ -104,24 +113,24 @@ export default function SignUp({navigation}) {
   const confirmPasswordRef = useRef(null);
   // To Store Form Data
   const [form, setForm] = useState({
-    visitorType: '', 
-    visitorTypeText: '', 
-    firstName: '', 
-    lastName: '', 
-    email: '', 
-    countryCode: '', 
-    contactNumber: '', 
+    visitorType: '',
+    visitorTypeText: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    countryCode: '',
+    contactNumber: '',
     jobTitle: '',
     jobTitleText: '',
     jobFunction: '',
     jobFunctionText: '',
-    sector: '', 
-    sectorText: '', 
-    companyName: '', 
-    companyAddress: '', 
-    website: '', 
-    image: '', 
-    password: '', 
+    sector: '',
+    sectorText: '',
+    companyName: '',
+    companyAddress: '',
+    website: '',
+    image: '',
+    password: '',
     confirmPassword: '',
   });
   // Error Messages after Validation
@@ -144,7 +153,7 @@ export default function SignUp({navigation}) {
   const [confirmPasswordVisibility, setConfirmPasswordVisibility] = useState(true);
   // Handle Input Changes
   const handleInputChange = (field, value) => {
-    setForm(prevState => ({...prevState, [field]: value}));
+    setForm(prevState => ({ ...prevState, [field]: value }));
   };
 
   const isValidWebsite = url => {
@@ -173,7 +182,7 @@ export default function SignUp({navigation}) {
         errorSetter(errorMessage);
         return false;
       }
-      
+
       if (!form[field]) {
         errorSetter(errorMessage);
         return false;
@@ -181,7 +190,7 @@ export default function SignUp({navigation}) {
       errorSetter('');
       return true;
     };
-  
+
     if (step === 1) {
       // Validate fields for step 2
       const step1Fields = [
@@ -192,11 +201,11 @@ export default function SignUp({navigation}) {
         { field: 'contactNumber', errorSetter: setContactNumberValidError, errorMessage: t('number_err') },
         { field: 'countryCode', errorSetter: setCountryCodeValidError, errorMessage: t('country_code_err') },
       ];
-  
+
       for (const { field, errorSetter, errorMessage } of step1Fields) {
         if (!validateField(field, errorSetter, errorMessage)) return false;
       }
-  
+
       // Email validation pattern
       if (form.email && !emailPattern.test(form.email)) {
         setEmailValidError(t('invalid_email_err'));
@@ -206,14 +215,14 @@ export default function SignUp({navigation}) {
       if (form.contactNumber) {
         // Remove any non-digit characters before counting
         const digitsOnly = form.contactNumber.replace(/\D/g, '');
-        
+
         if (digitsOnly.length < 8) {
           setContactNumberValidError(t('contact_number_err'));
           return false;
         }
       }
     }
-  
+
     if (step === 2) {
       // Validate fields for step 3
       const step2Fields = [
@@ -224,7 +233,7 @@ export default function SignUp({navigation}) {
         { field: 'companyAddress', errorSetter: setCompanyAddressValidError, errorMessage: t('company_address_err') },
         { field: 'website', errorSetter: setWebsiteValidError, errorMessage: t('company_website_err') }
       ];
-  
+
       for (const { field, errorSetter, errorMessage } of step2Fields) {
         if (!validateField(field, errorSetter, errorMessage)) return false;
       }
@@ -241,12 +250,12 @@ export default function SignUp({navigation}) {
       const step3Fields = [
         { field: 'image', errorSetter: setImgValidError, errorMessage: t('image_err') },
       ];
-  
+
       for (const { field, errorSetter, errorMessage } of step3Fields) {
         if (!validateField(field, errorSetter, errorMessage)) return false;
       }
     }
-  
+
     return true;
   };
   // If Inputs are valid go to next Step using this method
@@ -274,7 +283,7 @@ export default function SignUp({navigation}) {
     if (criteriaMet < 3) {
       return t('password_medium_err');
     }
-    
+
     return '';
   };
 
@@ -286,7 +295,7 @@ export default function SignUp({navigation}) {
       const passwordError = validatePassword(form.password);
       setPasswordValidError(passwordError);
       if (passwordError) return false;
-      
+
       // Confirm password validation
       if (!form.confirmPassword) {
         setConfirmPasswordValidError(t('confirm_password_err'));
@@ -315,7 +324,7 @@ export default function SignUp({navigation}) {
         password: form.password,
       }));
     }
-  }; 
+  };
 
   const alertDialog = (type, title, message, btnText, method) => {
     Dialog.show({
@@ -333,7 +342,7 @@ export default function SignUp({navigation}) {
     });
   };
 
-  useEffect(() => {    
+  useEffect(() => {
     if (registerSuccess) {
       // navigate to SignIn Page
       navigation.navigate('SignIn');
@@ -350,7 +359,7 @@ export default function SignUp({navigation}) {
 
   useEffect(() => {
     if (registerError) {
-      const {message, validationError} = registerError;
+      const { message, validationError } = registerError;
       // Get Inputs Validation errors to show them in Dialog
       let validationMessages = '';
       if (validationError) {
@@ -365,24 +374,24 @@ export default function SignUp({navigation}) {
         t('error'),
         `${t(message)}\n${validationMessages}`,
         t('OK'),
-        () => {},
+        () => { },
       );
     }
   }, [registerError]);
 
-  const InputFieldIcon = ({icon}) => (
-    <Icon name={icon} size={20} color={BaseColor.kashmir} style={styles.leftIcon}/>
+  const InputFieldIcon = ({ icon }) => (
+    <Icon name={icon} size={20} color={BaseColor.kashmir} style={styles.leftIcon} />
   );
 
-  const StepIndicator = ({step, colors}) => (
+  const StepIndicator = ({ step, colors }) => (
     <View style={styles.stepIndicator}>
       {[1, 2, 3, 4].map(s => (
         <Icon
           key={s}
-          name={ s === 1 ? 'person' : s === 2 ? 'apartment' : s === 3 ? 'camera-alt' : 'lock'}
+          name={s === 1 ? 'person' : s === 2 ? 'apartment' : s === 3 ? 'camera-alt' : 'lock'}
           size={24}
           color={step === s ? colors.primary : colors.border}
-          style={{marginRight: s === 4 ? 0 : 30}}
+          style={{ marginRight: s === 4 ? 0 : 30 }}
         />
       ))}
     </View>
@@ -427,7 +436,7 @@ export default function SignUp({navigation}) {
       setChoosePictureModal(false);
     }
   };
-  
+
   const handleCameraLaunch = async () => {
     try {
       const result = await ImagePicker.launchCameraAsync({
@@ -569,10 +578,10 @@ export default function SignUp({navigation}) {
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <Header
           title={t('sign_up')}
-          renderLeft={() => ( <Icon name="arrow-back" size={20} color={colors.primary} enableRTL={true} /> )}
+          renderLeft={() => (<Icon name="arrow-back" size={20} color={colors.primary} enableRTL={true} />)}
           onPressLeft={() => {
             navigation.goBack();
             dispatch(resetRegisterState());
@@ -581,34 +590,34 @@ export default function SignUp({navigation}) {
         <SafeAreaView style={BaseStyle.safeAreaView}>
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={{flex: 1}}
+            style={{ flex: 1 }}
             keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
             <ScrollView
               ref={scrollViewRef}
-              contentContainerStyle={{flexGrow: 1}}
+              contentContainerStyle={{ flexGrow: 1 }}
               keyboardShouldPersistTaps="handled"
               onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}>
               <Image source={theme.dark ? Images.LoginBGDark : Images.LoginBG} style={styles.bottomImage} />
               <Image source={Images.appLogo} style={styles.appLogo} />
               {
                 loading
-                ? (
-                    <View style={{flex: 0.6, justifyContent: 'center', alignItems: 'center'}}>
+                  ? (
+                    <View style={{ flex: 0.6, justifyContent: 'center', alignItems: 'center' }}>
                       <LottieView
                         source={Images.loading}
                         autoPlay
                         loop
-                        style={{width: 200, height: 200}}
+                        style={{ width: 200, height: 200 }}
                       />
                     </View>
                   )
-                : error ? (
-                    <View style={{flex: 0.6, justifyContent: 'center', alignItems: 'center'}}>
+                  : error ? (
+                    <View style={{ flex: 0.6, justifyContent: 'center', alignItems: 'center' }}>
                       <Text semibold>{t('Something_went_wrong_try_again')}</Text>
                       <Text bold>{t('thank_you')}</Text>
-                    </View>                  
+                    </View>
                   ) : (
-                    <View style={[styles.container, {backgroundColor: colors.card, marginBottom: isKeyboardVisible && '40%'}]}>
+                    <View style={[styles.container, { backgroundColor: colors.card, marginBottom: isKeyboardVisible && '40%' }]}>
                       {/* Stepper */}
                       <StepIndicator step={step} colors={colors} />
                       <View style={styles.lineStyle} />
@@ -616,14 +625,14 @@ export default function SignUp({navigation}) {
                       {/* 1st Step: User info */}
                       {step === 1 && (
                         <>
-                          <TouchableOpacity onPress={()=> setVisitorTypeModal(true)} style={{width:'100%'}}>
-                            <View style={[styles.dropdownBtn, {backgroundColor: colors.background}]}>
-                              <Icon name="person-outline" size={20} color={BaseColor.kashmir}/>
-                              <Text 
+                          <TouchableOpacity onPress={() => setVisitorTypeModal(true)} style={{ width: '100%' }}>
+                            <View style={[styles.dropdownBtn, { backgroundColor: colors.background }]}>
+                              <Icon name="person-outline" size={20} color={BaseColor.kashmir} />
+                              <Text
                                 numberOfLines={1}
                                 style={{
                                   paddingLeft: 18,
-                                  width: '80%', 
+                                  width: '80%',
                                   color: form.visitorType === '' ? 'grey' : colors.text,
                                   fontWeight: form.visitorType === '' ? FontWeight.regular : FontWeight.semibold,
                                 }}>
@@ -641,7 +650,7 @@ export default function SignUp({navigation}) {
                               innerRef={firstNameRef}
                               onChangeText={text => handleInputChange('firstName', text)}
                               placeholder={t('firstname')}
-                              style={[styles.placeholderInput, {marginTop: 10, backgroundColor: colors.background}]}
+                              style={[styles.placeholderInput, { marginTop: 10, backgroundColor: colors.background }]}
                               value={form.firstName}
                               returnKeyType="next"
                               onSubmitEditing={() => lastNameRef.current?.focus()}
@@ -660,7 +669,7 @@ export default function SignUp({navigation}) {
                                 handleInputChange('lastName', text)
                               }
                               placeholder={t('lastname')}
-                              style={[styles.placeholderInput, {marginTop: 10, backgroundColor: colors.background}]}
+                              style={[styles.placeholderInput, { marginTop: 10, backgroundColor: colors.background }]}
                               value={form.lastName}
                               returnKeyType="next"
                               onSubmitEditing={() => emailRef.current?.focus()}
@@ -678,7 +687,7 @@ export default function SignUp({navigation}) {
                               onChangeText={text => handleInputChange('email', text)}
                               placeholder={t('email')}
                               keyboardType="email-address"
-                              style={[styles.placeholderInput, {marginTop: 10, backgroundColor: colors.background}]}
+                              style={[styles.placeholderInput, { marginTop: 10, backgroundColor: colors.background }]}
                               value={form.email}
                               returnKeyType="next"
                               onSubmitEditing={() => contactNumberRef.current?.focus()}
@@ -689,17 +698,17 @@ export default function SignUp({navigation}) {
                             <Text style={styles.errormessage}>{emailValidError}</Text>
                           )}
 
-                          <View style={{flexDirection:'row', justifyContent: 'space-between', width: '100%'}}>
-                            <InputFieldIcon icon={"phone"} />
-                            <TouchableOpacity 
-                              onPress={()=> {
+                          <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
+                            {/* <InputFieldIcon icon={"phone"} /> */}
+                            <TouchableOpacity
+                              onPress={() => {
                                 Keyboard.dismiss();
                                 setCoutryCodeModal(true);
-                              }} 
-                              style={{width:'25%'}}>
-                              <View style={[styles.phoneCodeBtn, {backgroundColor: colors.background}]}>
-                                <Icon name="phone" size={20} color={BaseColor.kashmir}/>
-                                <Text>{'+'+countryCode.phonecode}</Text>
+                              }}
+                              style={{ width: '25%' }}>
+                              <View style={[styles.phoneCodeBtn, { backgroundColor: colors.background }]}>
+                                <Icon name="phone" size={20} color={BaseColor.kashmir} />
+                                <Text>{countryCode.iso ? getFlagEmoji(countryCode.iso) : '+' + countryCode.phonecode}</Text>
                               </View>
                             </TouchableOpacity>
                             <TextInput
@@ -707,7 +716,7 @@ export default function SignUp({navigation}) {
                               onChangeText={text => handleInputChange('contactNumber', text)}
                               placeholder={t('contact_number')}
                               keyboardType="phone-pad"
-                              style={[styles.placeholderInput, {marginTop: 10, width: '70%', backgroundColor: colors.background}]}
+                              style={[styles.placeholderInput, { marginTop: 10, width: '70%', backgroundColor: colors.background }]}
                               value={form.contactNumber}
                               returnKeyType="next"
                               onSubmitEditing={() => nextStep()}
@@ -726,12 +735,12 @@ export default function SignUp({navigation}) {
                       {/* 2nd Step: Company Info */}
                       {step === 2 && (
                         <>
-                          <TouchableOpacity onPress={()=> setSectorModal(true)} style={{width:'100%'}}>
-                            <View style={[styles.dropdownBtn, {backgroundColor: colors.background}]}>
-                              <Icon name="dashboard" size={20} color={BaseColor.kashmir}/>
-                              <Text 
+                          <TouchableOpacity onPress={() => setSectorModal(true)} style={{ width: '100%' }}>
+                            <View style={[styles.dropdownBtn, { backgroundColor: colors.background }]}>
+                              <Icon name="dashboard" size={20} color={BaseColor.kashmir} />
+                              <Text
                                 style={{
-                                  paddingLeft: 18, 
+                                  paddingLeft: 18,
                                   width: '80%',
                                   color: form.sector === '' ? 'grey' : colors.text,
                                   fontWeight: form.sector === '' ? FontWeight.regular : FontWeight.semibold,
@@ -749,12 +758,12 @@ export default function SignUp({navigation}) {
                             <Text style={styles.errormessage}>{sectorValidError}</Text>
                           )}
 
-                          <TouchableOpacity onPress={()=> setJobTitleModal(true)} style={{width:'100%'}}>
-                            <View style={[styles.dropdownBtn, {backgroundColor: colors.background}]}>
-                              <Icon name="cases" size={20} color={BaseColor.kashmir}/>
-                              <Text 
+                          <TouchableOpacity onPress={() => setJobTitleModal(true)} style={{ width: '100%' }}>
+                            <View style={[styles.dropdownBtn, { backgroundColor: colors.background }]}>
+                              <Icon name="cases" size={20} color={BaseColor.kashmir} />
+                              <Text
                                 style={{
-                                  paddingLeft: 18 , 
+                                  paddingLeft: 18,
                                   color: form.jobTitle === '' ? 'grey' : colors.text,
                                   fontWeight: form.jobTitle === '' ? FontWeight.regular : FontWeight.semibold,
                                   textAlign: 'center',
@@ -769,12 +778,12 @@ export default function SignUp({navigation}) {
                             <Text style={styles.errormessage}>{jobTitleValidError}</Text>
                           )}
 
-                          <TouchableOpacity onPress={()=> setJobFunctionModal(true)} style={{width:'100%'}}>
-                            <View style={[styles.dropdownBtn, {backgroundColor: colors.background}]}>
-                              <Icon name="account-tree" size={20} color={BaseColor.kashmir}/>
-                              <Text 
+                          <TouchableOpacity onPress={() => setJobFunctionModal(true)} style={{ width: '100%' }}>
+                            <View style={[styles.dropdownBtn, { backgroundColor: colors.background }]}>
+                              <Icon name="account-tree" size={20} color={BaseColor.kashmir} />
+                              <Text
                                 style={{
-                                  paddingLeft: 18 , 
+                                  paddingLeft: 18,
                                   color: form.jobFunction === '' ? 'grey' : colors.text,
                                   fontWeight: form.jobFunction === '' ? FontWeight.regular : FontWeight.semibold,
                                   textAlign: 'center',
@@ -797,7 +806,7 @@ export default function SignUp({navigation}) {
                                 handleInputChange('companyName', text)
                               }
                               placeholder={t('company_name')}
-                              style={[styles.placeholderInput, {marginTop: 10, backgroundColor: colors.background}]}
+                              style={[styles.placeholderInput, { marginTop: 10, backgroundColor: colors.background }]}
                               value={form.companyName}
                               returnKeyType="next"
                               onSubmitEditing={() => companyAddressRef.current?.focus()}
@@ -812,9 +821,9 @@ export default function SignUp({navigation}) {
                             <InputFieldIcon icon={"location-pin"} />
                             <TextInput
                               innerRef={companyAddressRef}
-                              onChangeText={text =>handleInputChange('companyAddress', text)}
+                              onChangeText={text => handleInputChange('companyAddress', text)}
                               placeholder={t('company_address')}
-                              style={[styles.placeholderInput, {marginTop: 10, backgroundColor: colors.background}]}
+                              style={[styles.placeholderInput, { marginTop: 10, backgroundColor: colors.background }]}
                               value={form.companyAddress}
                               returnKeyType="next"
                               onSubmitEditing={() => websiteRef.current?.focus()}
@@ -829,12 +838,12 @@ export default function SignUp({navigation}) {
                             <InputFieldIcon icon={"web"} />
                             <TextInput
                               innerRef={websiteRef}
-                              onChangeText={text =>handleInputChange('website', text)}
+                              onChangeText={text => handleInputChange('website', text)}
                               placeholder={t('website')}
-                              style={[styles.placeholderInput, {marginTop: 10, backgroundColor: colors.background}]}
+                              style={[styles.placeholderInput, { marginTop: 10, backgroundColor: colors.background }]}
                               value={form.website}
                               returnKeyType="next"
-                              onSubmitEditing={() => nextStep()} 
+                              onSubmitEditing={() => nextStep()}
                               blurOnSubmit={false}
                               autoCapitalize="none"
                             />
@@ -849,10 +858,10 @@ export default function SignUp({navigation}) {
                       {step === 3 && (
                         <View style={styles.uploadContainer}>
                           <TouchableOpacity
-                            onPress={()=> setChoosePictureModal(true)}
+                            onPress={() => setChoosePictureModal(true)}
                             style={styles.uploadButton}>
                             {form.image ? (
-                              <Image source={{uri: form.image}} style={styles.uploadImage} />
+                              <Image source={{ uri: form.image }} style={styles.uploadImage} />
                             ) : (
                               <View
                                 style={[
@@ -863,7 +872,7 @@ export default function SignUp({navigation}) {
                                   },
                                 ]}>
                                 <Icon name="camera" size={32} color={colors.primary} />
-                                <Text style={[styles.uploadText, {color: colors.primary}]}>
+                                <Text style={[styles.uploadText, { color: colors.primary }]}>
                                   Ajouter mon image
                                 </Text>
                               </View>
@@ -882,8 +891,8 @@ export default function SignUp({navigation}) {
                             <InputFieldIcon icon={"lock"} />
                             <TextInput
                               innerRef={passwordRef}
-                              style={[styles.placeholderInput, {marginTop: 10, backgroundColor: colors.background}]}
-                              onChangeText={text =>handleInputChange('password', text)}
+                              style={[styles.placeholderInput, { marginTop: 10, backgroundColor: colors.background }]}
+                              onChangeText={text => handleInputChange('password', text)}
                               secureTextEntry={passwordVisibility}
                               placeholder={t('password')}
                               value={form.password}
@@ -892,7 +901,7 @@ export default function SignUp({navigation}) {
                               blurOnSubmit={false}
                             />
                             <TouchableOpacity
-                              onPress={() =>setPasswordVisibility(!passwordVisibility)}
+                              onPress={() => setPasswordVisibility(!passwordVisibility)}
                               style={styles.eyeIconContainer}>
                               <Icon
                                 name={passwordVisibility ? 'visibility-off' : 'visibility'}
@@ -909,8 +918,8 @@ export default function SignUp({navigation}) {
                             <InputFieldIcon icon={"lock"} />
                             <TextInput
                               innerRef={confirmPasswordRef}
-                              style={[styles.placeholderInput, {marginTop: 10, backgroundColor: colors.background}]}
-                              onChangeText={text =>handleInputChange('confirmPassword', text)}
+                              style={[styles.placeholderInput, { marginTop: 10, backgroundColor: colors.background }]}
+                              onChangeText={text => handleInputChange('confirmPassword', text)}
                               secureTextEntry={confirmPasswordVisibility}
                               placeholder={t('confirm_password')}
                               value={form.confirmPassword}
@@ -934,14 +943,14 @@ export default function SignUp({navigation}) {
                       )}
 
                       {/* Navigation Buttons */}
-                      <View style={[styles.buttonContainer, {justifyContent: step === 1 ? 'flex-end' : 'space-between'}]}>
+                      <View style={[styles.buttonContainer, { justifyContent: step === 1 ? 'flex-end' : 'space-between' }]}>
                         {step > 1 && (
                           <TouchableOpacity onPress={prevStep} disabled={registerLoading}>
-                            <Icon 
-                              name="arrow-circle-left" 
-                              size={40} 
+                            <Icon
+                              name="arrow-circle-left"
+                              size={40}
                               color={colors.primary}
-                              style={{opacity: registerLoading ? 0.5 : 1}}
+                              style={{ opacity: registerLoading ? 0.5 : 1 }}
                             />
                           </TouchableOpacity>
                         )}
@@ -956,8 +965,8 @@ export default function SignUp({navigation}) {
                         )}
                       </View>
                     </View>
-                )
-              }              
+                  )
+              }
             </ScrollView>
 
             {/* Profile Type */}
@@ -974,16 +983,16 @@ export default function SignUp({navigation}) {
                       setVisitorTypeModal(false);
                     }}>
                     {
-                      item.id === form.visitorType 
-                      ? (<Text body2 semibold style={{color:colors.primary}}>{`${item.name}`}</Text>)
-                      : (<Text body2 semibold>{`${item.name}`}</Text>)
+                      item.id === form.visitorType
+                        ? (<Text body2 semibold style={{ color: colors.primary }}>{`${item.name}`}</Text>)
+                        : (<Text body2 semibold>{`${item.name}`}</Text>)
                     }
                   </TouchableOpacity>
                 )}
                 contentContainerStyle={{ paddingBottom: 20 }}
                 keyboardShouldPersistTaps="handled"
-                ListEmptyComponent={()=>(
-                  <Text style={{padding:20}}>{t('no_visitor_profile_data')}</Text>
+                ListEmptyComponent={() => (
+                  <Text style={{ padding: 20 }}>{t('no_visitor_profile_data')}</Text>
                 )}
               />
             </SharedModal>
@@ -1000,7 +1009,7 @@ export default function SignUp({navigation}) {
                       placeholderTextColor={colors.border}
                       value={searchQuery}
                       onChangeText={setSearchQuery}
-                      style={[styles.searchCountry, {borderColor: colors.border, color: colors.text}]}
+                      style={[styles.searchCountry, { borderColor: colors.border, color: colors.text }]}
                     />
                   </View>
                 }
@@ -1013,22 +1022,22 @@ export default function SignUp({navigation}) {
                       setCoutryCodeModal(false);
                     }}>
                     {
-                      item.phonecode === form.countryCode 
-                      ? (<Text body2 semibold style={{color:colors.primary}}>{`(+${item.phonecode}) ${item.name}`}</Text>)
-                      : (<Text body2 semibold>{`(+${item.phonecode}) ${item.name}`}</Text>)
+                      item.phonecode === form.countryCode
+                        ? (<Text body2 semibold style={{ color: colors.primary }}>{`${getFlagEmoji(item.iso)} ${item.name}`}</Text>)
+                        : (<Text body2 semibold>{`${getFlagEmoji(item.iso)} ${item.name}`}</Text>)
                     }
                   </TouchableOpacity>
                 )}
                 contentContainerStyle={{ paddingBottom: 20 }}
                 keyboardShouldPersistTaps="handled"
-                ListEmptyComponent={()=>(
-                  <Text style={{padding:20}}>{t('no_country_code_data')}</Text>
+                ListEmptyComponent={() => (
+                  <Text style={{ padding: 20 }}>{t('no_country_code_data')}</Text>
                 )}
               />
             </SharedModal>
 
             {/* JOB Sector Modal */}
-            <SharedModal visible={sectorModal} onClose={()=>setSectorModal(false)} colors={colors}>
+            <SharedModal visible={sectorModal} onClose={() => setSectorModal(false)} colors={colors}>
               <FlatList
                 data={categories}
                 keyExtractor={(item) => item.id.toString()}
@@ -1049,22 +1058,22 @@ export default function SignUp({navigation}) {
                       setSectorModal(false);
                     }}>
                     {
-                      item.name === form.sectorText 
-                      ? (<Text body2 semibold style={{color:colors.primary}}>{`${item.name}`}</Text>)
-                      : (<Text body2 semibold>{`${item.name}`}</Text>)
+                      item.name === form.sectorText
+                        ? (<Text body2 semibold style={{ color: colors.primary }}>{`${item.name}`}</Text>)
+                        : (<Text body2 semibold>{`${item.name}`}</Text>)
                     }
                   </TouchableOpacity>
                 )}
                 contentContainerStyle={{ paddingBottom: 20 }}
                 keyboardShouldPersistTaps="handled"
-                ListEmptyComponent={()=>(
-                  <Text style={{padding:20}}>{t('no_job_sector_data')}</Text>
+                ListEmptyComponent={() => (
+                  <Text style={{ padding: 20 }}>{t('no_job_sector_data')}</Text>
                 )}
               />
             </SharedModal>
 
             {/* JOB Title Modal */}
-            <SharedModal visible={jobTitleModal} onClose={()=>setJobTitleModal(false)} colors={colors}>
+            <SharedModal visible={jobTitleModal} onClose={() => setJobTitleModal(false)} colors={colors}>
               <FlatList
                 data={jobTitleList}
                 keyExtractor={(item) => item.id.toString()}
@@ -1077,18 +1086,18 @@ export default function SignUp({navigation}) {
                       setJobTitleModal(false);
                     }}>
                     {
-                      item.name === form.jobTitleText 
-                      ? (<Text body2 semibold style={{color:colors.primary}}>{`${item.name}`}</Text>)
-                      : (<Text body2 semibold>{`${item.name}`}</Text>)
+                      item.name === form.jobTitleText
+                        ? (<Text body2 semibold style={{ color: colors.primary }}>{`${item.name}`}</Text>)
+                        : (<Text body2 semibold>{`${item.name}`}</Text>)
                     }
                   </TouchableOpacity>
                 )}
                 contentContainerStyle={{ paddingBottom: 20 }}
                 keyboardShouldPersistTaps="handled"
-                ListEmptyComponent={()=>(
-                  <Text style={{padding:20}}>
+                ListEmptyComponent={() => (
+                  <Text style={{ padding: 20 }}>
                     {
-                      form.sector == '' 
+                      form.sector == ''
                         ? t('choose_job_sector')
                         : t('no_job_title_data')
                     }
@@ -1098,7 +1107,7 @@ export default function SignUp({navigation}) {
             </SharedModal>
 
             {/* JOB Function Modal */}
-            <SharedModal visible={jobFunctionModal} onClose={()=>setJobFunctionModal(false)} colors={colors}>
+            <SharedModal visible={jobFunctionModal} onClose={() => setJobFunctionModal(false)} colors={colors}>
               <FlatList
                 data={jobFunctionList}
                 keyExtractor={(item) => item.id.toString()}
@@ -1111,18 +1120,18 @@ export default function SignUp({navigation}) {
                       setJobFunctionModal(false);
                     }}>
                     {
-                      item.name === form.jobFunctionText 
-                      ? (<Text body2 semibold style={{color:colors.primary}}>{`${item.name}`}</Text>)
-                      : (<Text body2 semibold>{`${item.name}`}</Text>)
+                      item.name === form.jobFunctionText
+                        ? (<Text body2 semibold style={{ color: colors.primary }}>{`${item.name}`}</Text>)
+                        : (<Text body2 semibold>{`${item.name}`}</Text>)
                     }
                   </TouchableOpacity>
                 )}
                 contentContainerStyle={{ paddingBottom: 20 }}
                 keyboardShouldPersistTaps="handled"
-                ListEmptyComponent={()=>(
-                  <Text style={{padding:20}}>
+                ListEmptyComponent={() => (
+                  <Text style={{ padding: 20 }}>
                     {
-                      form.sector == '' 
+                      form.sector == ''
                         ? t('choose_job_sector')
                         : t('no_job_function_data')
                     }
@@ -1130,7 +1139,7 @@ export default function SignUp({navigation}) {
                 )}
               />
             </SharedModal>
-            <SharedModal visible={choosePictureModal} onClose={()=>setChoosePictureModal(false)} colors={colors}>
+            <SharedModal visible={choosePictureModal} onClose={() => setChoosePictureModal(false)} colors={colors}>
               <Animated.View style={styles.pickerContainer}>
                 <View style={styles.pickerRow}>
                   {/* Camera */}
@@ -1140,7 +1149,7 @@ export default function SignUp({navigation}) {
                     <View
                       style={[
                         styles.pickerIconWrapper,
-                        {backgroundColor: '#FC5C65'},
+                        { backgroundColor: '#FC5C65' },
                       ]}>
                       <MatIcon name="camera-alt" size={24} color="white" />
                     </View>
@@ -1152,7 +1161,7 @@ export default function SignUp({navigation}) {
                     <View
                       style={[
                         styles.pickerIconWrapper,
-                        {backgroundColor: '#45AAF2'},
+                        { backgroundColor: '#45AAF2' },
                       ]}>
                       <MatIcon name="photo-library" size={24} color="white" />
                     </View>

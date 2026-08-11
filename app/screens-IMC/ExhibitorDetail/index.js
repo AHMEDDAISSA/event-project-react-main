@@ -232,13 +232,13 @@ export default function ExhibitorDetail({navigation, route}) {
   if (exhibitorDetails === null) {
     return (
       <View style={{ flex: 1 }}>
-        <Header
+        {/* <Header
           title=""
           renderLeft={() => (
             <Icon name="arrow-back" size={20} color="black" enableRTL />
           )}
           onPressLeft={navigation.goBack}
-        />
+        /> */}
         <SafeAreaView style={{ flex: 1 }} edges={['right', 'left', 'bottom']}>
           <View style={styles.centerContainer}>
             <Text>{t('error_fetching_data')}</Text>
@@ -275,12 +275,21 @@ export default function ExhibitorDetail({navigation, route}) {
         title=""
         renderLeft={() => {
           return (
+            <View style={{
+                backgroundColor: 'rgba(0,0,0,0.45)',
+                width: 34,
+                height: 34,
+                borderRadius: 17,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
             <Icon
               name="arrow-back"
               size={20}
-              color={imageError ? colors.primary : BaseColor.whiteColor}
+              color={BaseColor.whiteColor}
               enableRTL={true}
             />
+          </View>
           );
         }}
         onPressLeft={() => {

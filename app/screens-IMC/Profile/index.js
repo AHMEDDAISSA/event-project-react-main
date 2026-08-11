@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, ScrollView, TouchableOpacity, Modal} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {BaseStyle, useTheme, BaseSetting} from '../../config';
-import QRCode from 'react-native-qrcode-svg';
+
 import {
   Header,
   SafeAreaView,
@@ -22,7 +22,6 @@ export default function Profile({navigation}) {
   const {t} = useTranslation();
 
   const [loading, setLoading] = useState(false);
-  const [qrModalVisible, setQrModalVisible] = useState(false);
   const dispatch = useDispatch();
 
   // Handle No Internet Connection
@@ -95,61 +94,6 @@ export default function Profile({navigation}) {
               onPress={() => navigation.navigate('ProfileEdit')}
             />
 
-            {/* QR Code Networking Options */}
-            <TouchableOpacity
-              style={[
-                styles.profileItem,
-                {
-                  borderBottomColor: colors.border,
-                  borderBottomWidth: 1,
-                  marginTop: 10,
-                },
-              ]}
-              onPress={() => setQrModalVisible(true)}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Icon
-                  name="qr-code"
-                  size={18}
-                  color={colors.primary}
-                  style={{marginRight: 5}}
-                />
-                <Text body1>{t('my_qr_code') || 'Mon Code QR'}</Text>
-              </View>
-              <Icon
-                name="chevron-right"
-                size={18}
-                color={colors.primary}
-                style={{marginLeft: 5}}
-                enableRTL={true}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[
-                styles.profileItem,
-                {
-                  borderBottomColor: colors.border,
-                  borderBottomWidth: 1,
-                },
-              ]}
-              onPress={() => navigation.navigate('QRScannerScreen')}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Icon
-                  name="qr-code-scanner"
-                  size={18}
-                  color={colors.primary}
-                  style={{marginRight: 5}}
-                />
-                <Text body1>{t('scan_qr_code') || 'Scanner un Code QR'}</Text>
-              </View>
-              <Icon
-                name="chevron-right"
-                size={18}
-                color={colors.primary}
-                style={{marginLeft: 5}}
-                enableRTL={true}
-              />
-            </TouchableOpacity>
 
             {
               type == 'exhibitor' && (
@@ -428,68 +372,7 @@ export default function Profile({navigation}) {
           <Text semibold>{t('app_version')}{'  '}</Text>
           <Text bold>{BaseSetting.appVersion}</Text>
         </View>
-        {/* QR Code Display Modal */}
-        <Modal
-          visible={qrModalVisible}
-          transparent={true}
-          animationType="fade"
-          onRequestClose={() => setQrModalVisible(false)}>
-          <View style={{
-            flex: 1,
-            backgroundColor: 'rgba(0, 0, 0, 0.6)',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: 20
-          }}>
-            <View style={{
-              backgroundColor: colors.card,
-              borderRadius: 16,
-              padding: 24,
-              alignItems: 'center',
-              width: '90%',
-              maxWidth: 340,
-              elevation: 5,
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.25,
-              shadowRadius: 3.84,
-            }}>
-              <Text title2 bold style={{ marginBottom: 10, color: colors.text }}>
-                {t('my_qr_code') || 'Mon Code QR'}
-              </Text>
-              <Text body2 style={{ color: colors.text, textAlign: 'center', marginBottom: 20 }}>
-                {t('my_qr_code_desc') || 'Laissez un autre participant scanner ce code pour afficher votre profil.'}
-              </Text>
 
-              {user?.id && (
-                <View style={{
-                  padding: 16,
-                  backgroundColor: 'white',
-                  borderRadius: 12,
-                  marginBottom: 20
-                }}>
-                  <QRCode
-                    value={`imc-event:${type}:${user.id}`}
-                    size={200}
-                    color="black"
-                    backgroundColor="white"
-                  />
-                </View>
-              )}
-
-              <Text headline bold style={{ color: colors.primary, marginBottom: 5 }}>
-                {type === 'exhibitor' ? user?.organization_name : user?.company_name || ''}
-              </Text>
-              <Text body1 style={{ color: colors.text, marginBottom: 20 }}>
-                {type === 'exhibitor' ? user?.first_name : user?.name || ''}
-              </Text>
-
-              <Button full onPress={() => setQrModalVisible(false)}>
-                <Text style={{ color: 'white' }}>{t('close') || 'Fermer'}</Text>
-              </Button>
-            </View>
-          </View>
-        </Modal>
       </SafeAreaView>
     </View>
   );
