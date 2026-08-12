@@ -31,4 +31,23 @@ export default StyleSheet.create({
     right: 9,
     bottom: 0,
   },
+  containCentered: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 20,
+    width: '100%',
+  },
+  contentCentered: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  thumbCentered: {
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+    marginBottom: 12,
+    borderWidth: 1,
+  },
 });

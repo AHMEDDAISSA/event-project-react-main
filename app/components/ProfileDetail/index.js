@@ -20,20 +20,21 @@ export default function ProfileDetail(props) {
     textSecond,
     textThird,
     icon,
-    isExhibitor
+    isExhibitor,
+    centered
   } = props;
   return (
     <TouchableOpacity
-      style={[styles.contain, style]}
+      style={[centered ? styles.containCentered : styles.contain, style]}
       onPress={onPress}
       activeOpacity={0.9}>
-      <View style={[styles.contentLeft, styleLeft]}>
+      <View style={[centered ? styles.contentCentered : styles.contentLeft, styleLeft]}>
         <View>
           {imageError ? (
             <Image 
               source={Images.noImage} 
               style={[
-                styles.thumb, 
+                centered ? styles.thumbCentered : styles.thumb, 
                 styleThumb, 
                 { borderColor: colors.border }
               ]}
@@ -42,7 +43,7 @@ export default function ProfileDetail(props) {
             <Image 
               source={image} 
               style={[
-                styles.thumb, 
+                centered ? styles.thumbCentered : styles.thumb, 
                 styleThumb,
                 { borderColor: colors.border }
               ]} 
@@ -55,7 +56,7 @@ export default function ProfileDetail(props) {
             </Text>
           </View> */}
         </View>
-        <View style={{alignItems: 'flex-start'}}>
+        <View style={{alignItems: centered ? 'center' : 'flex-start'}}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text headline semibold numberOfLines={1}>
               {textFirst}
@@ -76,19 +77,20 @@ export default function ProfileDetail(props) {
             body2
             style={{
               marginTop: 3,
-              paddingRight: 10,
+              paddingRight: centered ? 0 : 10,
+              textAlign: centered ? 'center' : 'left',
             }}
             numberOfLines={1}>
             {textSecond}
           </Text>
           {textThird && (
-            <Text footnote grayColor numberOfLines={1}>
+            <Text footnote grayColor numberOfLines={1} style={{ textAlign: centered ? 'center' : 'left' }}>
               {textThird}
             </Text>
           )}
         </View>
       </View>
-      {icon && (
+      {icon && !centered && (
         <View style={[styles.contentRight, styleRight]}>
           <Icon
             name="chevron-right"
@@ -117,6 +119,7 @@ ProfileDetail.propTypes = {
   styleRight: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   icon: PropTypes.bool,
   onPress: PropTypes.func,
+  centered: PropTypes.bool,
 };
 
 ProfileDetail.defaultProps = {
@@ -130,4 +133,5 @@ ProfileDetail.defaultProps = {
   styleThumb: {},
   styleRight: {},
   onPress: () => {},
+  centered: false,
 };
