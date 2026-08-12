@@ -38,6 +38,8 @@ import LottieView from 'lottie-react-native';
 import Checkbox from 'expo-checkbox';
 import * as ImagePicker from "expo-image-picker";
 import ToastUtils from "../../config/toastUtils";
+import CountryPicker from 'react-native-country-picker-modal';
+import { changeLanguage } from 'i18next';
 
 export default function SignUpExhibitor({navigation}) {
   const dispatch = useDispatch();
@@ -77,7 +79,8 @@ export default function SignUpExhibitor({navigation}) {
 
   // Initialize Data of Bottom modals
   const [countryCodes, setCountryCodes] = useState([]);
-  const [countryCode, setCountryCode] = useState({iso: '', phonecode: '00'});
+  const [countryCode, setCountryCode] = useState({iso: 'US', phonecode: '00'});
+  const [countryPickerVisible, setCountryPickerVisible] = useState(false);
   const [categories, setCategories] = useState([]);
   const [jobFunctionList, setJobFunctionList] = useState([]);
   const [jobTitleList, setJobTitleList] = useState([]);
@@ -245,6 +248,7 @@ export default function SignUpExhibitor({navigation}) {
         
         if (digitsOnly.length < 8) {
           setContactNumberValidError(t('contact_number_err'));
+
           return false;
         }
       }
@@ -657,7 +661,6 @@ export default function SignUpExhibitor({navigation}) {
   };
 
   // Modal
-  const [coutryCodeModal, setCoutryCodeModal] = useState(false);
   const [sectorModal, setSectorModal] = useState(false);
   const [jobTitleModal, setJobTitleModal] = useState(false);
   const [jobFunctionModal, setJobFunctionModal] = useState(false);
@@ -801,26 +804,44 @@ export default function SignUpExhibitor({navigation}) {
                           justifyContent: 'space-between',
                           width: '100%',
                         }}>
-                        {/* <InputFieldIcon icon={'phone'} /> */}
-                        <TouchableOpacity
-                          onPress={() => {
-                            Keyboard.dismiss();
-                            setCoutryCodeModal(true);
+                        <CountryPicker
+                          countryCode={countryCode.iso || 'US'}
+                          withFilter
+                          withFlag
+                          withCallingCode
+                          withCallingCodeButton
+                          withAlphaFilter
+                          withEmoji
+                          visible={countryPickerVisible}
+                          theme={{
+                            backgroundColor: colors.card,
+                            onBackgroundTextColor: colors.text,
+                            fontSize: 16,
+                            filterPlaceholderTextColor: colors.border,
+                            activeOpacity: 0.7,
+                            itemHeight: 52,
                           }}
-                          style={{width: '25%'}}>
-                          <View
-                            style={[
-                              styles.phoneCodeBtn,
-                              {backgroundColor: colors.background},
-                            ]}>
-                            <Icon
-                              name="phone"
-                              size={20}
-                              color={BaseColor.kashmir}
-                            />
-                            <Text>{'+' + countryCode.phonecode}</Text>
-                          </View>
-                        </TouchableOpacity>
+                          onSelect={(country) => {
+                            const code = country.callingCode?.[0] || '00';
+                            setCountryCode({ iso: country.cca2, phonecode: code });
+                            handleInputChange('countryCode', code);
+                            setCountryPickerVisible(false);
+                          }}
+                          onClose={() => setCountryPickerVisible(false)}
+                          renderFlagButton={() => (
+                            <TouchableOpacity
+                              onPress={() => {
+                                Keyboard.dismiss();
+                                setCountryPickerVisible(true);
+                              }}
+                              style={{ width: '25%' }}>
+                              <View style={[styles.phoneCodeBtn, { backgroundColor: colors.background }]}>
+                                <Icon name="phone" size={20} color={BaseColor.kashmir} />
+                                <Text>{countryCode.iso ? `+${countryCode.phonecode}` : '+'}</Text>
+                              </View>
+                            </TouchableOpacity>
+                          )}
+                        />
                         <TextInput
                           innerRef={contactNumberRef}
                           onChangeText={text =>
@@ -1265,62 +1286,6 @@ export default function SignUpExhibitor({navigation}) {
                 </View>
               )}
             </ScrollView>
-
-            {/* Country Code Modal */}
-            <SharedModal
-              visible={coutryCodeModal}
-              onClose={() => setCoutryCodeModal(false)}
-              colors={colors}>
-              {/* Filtered List */}
-              <FlatList
-                data={filteredCountries}
-                keyExtractor={item => item.id.toString()}
-                ListHeaderComponent={
-                  <View style={{padding: 10}}>
-                    <TextInput
-                      placeholder={t('search_country')}
-                      placeholderTextColor={colors.border}
-                      value={searchQuery}
-                      onChangeText={setSearchQuery}
-                      style={[
-                        styles.searchCountry,
-                        {borderColor: colors.border, color: colors.text},
-                      ]}
-                    />
-                  </View>
-                }
-                renderItem={({item}) => (
-                  <TouchableOpacity
-                    style={[
-                      styles.contentActionModalBottom,
-                      {borderBottomColor: colors.border},
-                    ]}
-                    onPress={() => {
-                      setCountryCode(item);
-                      handleInputChange('countryCode', item.phonecode);
-                      setCoutryCodeModal(false);
-                    }}>
-                    {item.phonecode === form.countryCode ? (
-                      <Text
-                        body2
-                        semibold
-                        style={{
-                          color: colors.primary,
-                        }}>{`(+${item.phonecode}) ${item.name}`}</Text>
-                    ) : (
-                      <Text
-                        body2
-                        semibold>{`(+${item.phonecode}) ${item.name}`}</Text>
-                    )}
-                  </TouchableOpacity>
-                )}
-                contentContainerStyle={{paddingBottom: 20}}
-                keyboardShouldPersistTaps="handled"
-                ListEmptyComponent={() => (
-                  <Text style={{padding: 20}}>{t('no_country_code_data')}</Text>
-                )}
-              />
-            </SharedModal>
 
             {/* JOB Sector Modal */}
             <SharedModal

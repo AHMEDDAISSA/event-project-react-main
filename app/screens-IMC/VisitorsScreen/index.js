@@ -74,11 +74,11 @@ export default function VisitorsScreen({navigation}) {
     }, []),
   );
 
-  const fetchVisitors = async (page, searchText) => {
+  const fetchVisitors = async (page, search = searchText) => {
     setVisitors([]);
     setLoading(true);
     try {
-      const response = await getVisitorsList(page, searchText);
+      const response = await getVisitorsList(page, search);
       if (response.code == 200) {
         setLoading(false);
         // Process Visitors and check for followers containing 'userID'
@@ -250,13 +250,13 @@ export default function VisitorsScreen({navigation}) {
   };
 
   const handlePageChange = async page => {
-    if (page > 0 && page <= pagination.total) {
+    if (page > 0 && page <= pagination.last_page) {
       setPagination(prev => ({
         ...prev,
         current_page: page,
       }));
+      await fetchVisitors(page);
     }
-    await fetchVisitors(page);
   };
 
   return (
