@@ -62,13 +62,15 @@ export default function SignIn({navigation}) {
     setEmailValidError('');
     setPasswordValidError('');
 
-    if (!email || !password) {
+    const trimmedEmail = email.trim();
+
+    if (!trimmedEmail || !password) {
       setEmailValidError(t('email_err'));
       setPasswordValidError(t('required_password_err'));
       setLoading(false);
       return;
     }
-    if (!emailPattern.test(email)) {
+    if (!emailPattern.test(trimmedEmail)) {
       setEmailValidError(t('invalid_email_err'));
       setLoading(false);
       return;
@@ -76,7 +78,7 @@ export default function SignIn({navigation}) {
 
     Keyboard.dismiss();
 
-    dispatch(login({ email, password, deviceToken }))
+    dispatch(login({ email: trimmedEmail, password, deviceToken }))
       .unwrap()
       .then(() => {
         setLoading(false);
@@ -89,7 +91,7 @@ export default function SignIn({navigation}) {
       })
       .catch((err) => {
         setLoading(false);
-        console.log("login err: ",err, { email, password, deviceToken });
+        console.log("login err: ",err, { email: trimmedEmail, password, deviceToken });
         ToastUtils.showErrorToast(`${t('error')}`, `${t(err)}`);
       });
   };  
@@ -139,7 +141,7 @@ export default function SignIn({navigation}) {
                 />
                 <TextInput
                   innerRef={emailRef}
-                  onChangeText={text => setemail(text)}
+                  onChangeText={text => setemail(text.trim())}
                   placeholder={t('email')}
                   style={[styles.placeholderInput, {marginTop: 10, backgroundColor: colors.background}]}
                   keyboardType={"email-address"}
