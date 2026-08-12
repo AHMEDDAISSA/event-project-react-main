@@ -77,11 +77,11 @@ export default function ExhibitorsScreen({navigation}) {
     }, []),
   );
 
-  const fetchExhibitors = async (page, searchText) => {
+  const fetchExhibitors = async (page, search = searchText) => {
     setExhibitors([]);
     setLoading(true);
     try {
-      const response = await getExhibitorsList(page, searchText);
+      const response = await getExhibitorsList(page, search);
       if (response.code == 200) {
         setLoading(false);
         // Process exhibitors and check for followers containing 'userID'
@@ -257,13 +257,13 @@ export default function ExhibitorsScreen({navigation}) {
   };
 
   const handlePageChange = async page => {
-    if (page > 0 && page <= pagination.total) {
+    if (page > 0 && page <= pagination.last_page) {
       setPagination(prev => ({
         ...prev,
         current_page: page,
       }));
+      await fetchExhibitors(page);
     }
-    await fetchExhibitors(page);
   };
 
   return (

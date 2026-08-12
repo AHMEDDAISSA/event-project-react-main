@@ -92,6 +92,7 @@ export default function Profile({navigation}) {
               textSecond={user?.email || ''}
               textThird={type == 'exhibitor' ? user?.organization_name : user?.company_name || ''}
               onPress={() => navigation.navigate('ProfileEdit')}
+              centered={true}
             />
 
 

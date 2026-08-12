@@ -5,7 +5,7 @@ if (
 ) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useState, useCallback, useEffect, useRef} from 'react';
 import {View,FlatList,TouchableWithoutFeedback,Keyboard} from 'react-native';
 import {BaseColor, BaseStyle, useTheme, Images} from '../../config';
 import {Header,SafeAreaView,Icon,Text,ProfileDetail,TextInput,Pagination,ActionButton} from '../../components';
@@ -26,14 +26,6 @@ export default function InterestsScreen({navigation}) {
   const {t} = useTranslation();
   const {user, type, permissions} = useSelector(state => state.auth);
 
-
-  //observer le text search
-  useEffect(() => {
-  const timeoutId = setTimeout(() => {
-    fetchInterests(1, searchText);
-  }, 500); 
-  return () => clearTimeout(timeoutId); 
-}, [searchText]);
 
   // Handle No Internet Connection
   useEffect(() => {
@@ -58,6 +50,20 @@ export default function InterestsScreen({navigation}) {
     total: 0,
     per_page: 10,
   });
+
+  const isMounted = useRef(false);
+
+  //observer le text search
+  useEffect(() => {
+    if (!isMounted.current) {
+      isMounted.current = true;
+      return;
+    }
+    const timeoutId = setTimeout(() => {
+      fetchInterests(1, searchText);
+    }, 500); 
+    return () => clearTimeout(timeoutId); 
+  }, [searchText]);
   
   useAndroidBack();
 
@@ -67,11 +73,11 @@ export default function InterestsScreen({navigation}) {
   }, []),
 );
 
-  const fetchInterests = async (page, searchText) => {
+  const fetchInterests = async (page, search = searchText) => {
     setExhibitors([]);
     setLoading(true);
     try {
-      const response = await getMyInterstedList(page, searchText);
+      const response = await getMyInterstedList(page, search);
       if (response.code == 200) {
         setLoading(false);
         if (type == 'exhibitor') {

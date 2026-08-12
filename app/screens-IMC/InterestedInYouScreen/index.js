@@ -78,10 +78,10 @@ export default function InterestedInYouScreen({navigation}) {
     }, []),
   );
 
-  const fetchInterestsInYou = async (page, searchText) => {
+  const fetchInterestsInYou = async (page, search = searchText) => {
     try {
       setLoading(true);
-      const response = await getInterstedInYouList(page, searchText);
+      const response = await getInterstedInYouList(page, search);
       if (response.code == 200) {
         setLoading(false);
         if (type == 'exhibitor') {
@@ -423,13 +423,13 @@ export default function InterestedInYouScreen({navigation}) {
   };
 
   const handlePageChange = async page => {
-    if (page > 0 && page <= pagination.total) {
+    if (page > 0 && page <= pagination.last_page) {
       setPagination(prev => ({
         ...prev,
         current_page: page,
       }));
+      await fetchInterestsInYou(page);
     }
-    await fetchInterestsInYou(page);
   };
 
   return (
