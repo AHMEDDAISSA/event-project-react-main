@@ -10,7 +10,7 @@ if (
 ) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useState, useCallback, useEffect, useRef} from 'react';
 import {
   View,
   FlatList,
@@ -75,17 +75,31 @@ export default function RecommandedScreen({navigation}) {
     per_page: 10,
   });
 
+  const isMounted = useRef(false);
+
+  useEffect(() => {
+    if (!isMounted.current) {
+      isMounted.current = true;
+      return;
+    }
+    const delayDebounceFn = setTimeout(() => {
+      fetchRecommandations(1, searchText);
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchText]);
+
   useFocusEffect(
     useCallback(() => {
       fetchRecommandations(pagination.current_page);
     }, []),
   );
 
-  const fetchRecommandations = async (page, searchText) => {
+  const fetchRecommandations = async (page, search = searchText) => {
     setExhibitors([]);
     setLoading(true);
     try {
-      const response = await getRecommendedForYouList(page, searchText);
+      const response = await getRecommendedForYouList(page, search);
       if (response.code == 200) {
         setLoading(false);
         // Process exhibitors and check for followers containing 'userID'
@@ -259,13 +273,13 @@ export default function RecommandedScreen({navigation}) {
   };
 
   const handlePageChange = async page => {
-    if (page > 0 && page <= pagination.total) {
+    if (page > 0 && page <= pagination.last_page) {
       setPagination(prev => ({
         ...prev,
         current_page: page,
       }));
+      await fetchRecommandations(page);
     }
-    await fetchRecommandations(page);
   };
 
   return (
