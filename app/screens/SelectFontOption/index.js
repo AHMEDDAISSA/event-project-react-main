@@ -41,7 +41,9 @@ export default function SelectFontOption({navigation}) {
                   ]}
                   onPress={() => setFont(item)}>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Text body1 style={{marginHorizontal: 8}}>
+                    <Text
+                      body1
+                      style={{marginHorizontal: 8, fontFamily: item}}>
                       {item}
                     </Text>
                   </View>

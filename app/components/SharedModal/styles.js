@@ -10,7 +10,7 @@ export default StyleSheet.create({
   },
   content: {
     width: '100%',
-    maxHeight: height * 0.5,
+    maxHeight: height * 0.55,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
     paddingHorizontal: 20,

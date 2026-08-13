@@ -11,6 +11,7 @@ import {
   DefaultFont,
 } from './theme';
 import {toastConfig} from './toastConfig';
+import {FontAssets, resolveFontFamily} from './fonts';
 
 export {
   BaseColor,
@@ -26,4 +27,6 @@ export {
   DefaultFont,
   ThemeSupport,
   toastConfig,
+  resolveFontFamily,
+  FontAssets,
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { BaseColor, useFont, useTheme } from "../config";
+import { BaseColor, resolveFontFamily, useFont, useTheme } from "../config";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { Icon } from "../components";
@@ -143,7 +143,7 @@ function BottomTabNavigator() {
         headerShown: false,
         tabBarLabelStyle: {
           fontSize: 12,
-          fontFamily: font,
+          fontFamily: resolveFontFamily(font),
           paddingBottom: 2,
         },
       }}

@@ -1,49 +1,7 @@
 import React from 'react';
 import {Text, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
-import {Typography, FontWeight, BaseColor, useTheme, useFont} from '../../config';
-
-const Roboto = {
-  100: 'Thin',
-  200: 'Thin',
-  300: 'Light',
-  400: 'Regular',
-  500: 'Medium',
-  600: 'Medium',
-  700: 'Bold',
-  800: 'Bold',
-  900: 'Black',
-  normal: 'Regular',
-  bold: 'Bold',
-};
-
-const Raleway = {
-  100: 'Thin',
-  200: 'ExtraLight',
-  300: 'Light',
-  400: 'Regular',
-  500: 'Medium',
-  600: 'SemiBold',
-  700: 'Bold',
-  800: 'ExtraBold',
-  900: 'Black',
-  normal: 'Regular',
-  bold: 'Bold',
-};
-
-const Merriweather = {
-  100: 'Light',
-  200: 'Light',
-  300: 'Light',
-  400: 'Regular',
-  500: 'Regular',
-  600: 'Bold',
-  700: 'Bold',
-  800: 'Bold',
-  900: 'Black',
-  normal: 'Regular',
-  bold: 'Bold',
-};
+import {Typography, FontWeight, BaseColor, useTheme, useFont, resolveFontFamily} from '../../config';
 
 export default function Index(props) {
   const {
@@ -133,33 +91,12 @@ export default function Index(props) {
   ]);
 
   if (textStyle.fontFamily) {
-    const fontStyle = textStyle.fontStyle == 'italic' ? 'Italic' : '';
     const fontWeight = textStyle.fontWeight ?? 400;
-    switch (textStyle.fontFamily) {
-      case 'Raleway':
-        textStyle.fontFamily = `${textStyle.fontFamily}-${
-          Raleway[fontWeight] == 'Regular'
-            ? Raleway[fontWeight]
-            : Raleway[fontWeight] + fontStyle
-        }`;
-        break;
-      case 'Roboto':
-        textStyle.fontFamily = `${textStyle.fontFamily}-${
-          Roboto[fontWeight] == 'Regular'
-            ? Roboto[fontWeight]
-            : Roboto[fontWeight] + fontStyle
-        }`;
-        break;
-      case 'Merriweather':
-        textStyle.fontFamily = `${textStyle.fontFamily}-${
-          Merriweather[fontWeight] == 'Regular'
-            ? Merriweather[fontWeight]
-            : Merriweather[fontWeight] + fontStyle
-        }`;
-        break;
-      default:
-        break;
-    }
+    textStyle.fontFamily = resolveFontFamily(
+      textStyle.fontFamily,
+      fontWeight,
+      textStyle.fontStyle,
+    );
   }
 
   return (

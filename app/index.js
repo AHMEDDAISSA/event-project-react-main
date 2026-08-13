@@ -7,6 +7,8 @@ import {AlertNotificationRoot} from 'react-native-alert-notification';
 import Toast from 'react-native-toast-message';
 import {toastConfig} from '../app/config';
 import {LogBox} from 'react-native';
+import {useFonts} from 'expo-font';
+import {FontAssets} from './config';
 
 console.disableYellowBox = true;
 LogBox.ignoreAllLogs();
@@ -14,6 +16,12 @@ LogBox.ignoreAllLogs();
 // const queryClient = new QueryClient();
 
 export default function App() {
+  const [fontsLoaded] = useFonts(FontAssets);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>

@@ -269,6 +269,13 @@ export default function ProfileEdit({navigation}) {
   const [imageError, setImageError] = useState(false);
   const [choosePictureModal, setChoosePictureModal] = useState(false);
 
+  useEffect(() => {
+    if (user?.imagePath) {
+      setDisplayImage(user.imagePath);
+      setImageError(false);
+    }
+  }, [user?.imagePath]);
+
   const requestCameraPermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(

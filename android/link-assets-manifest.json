@@ -1,0 +1,161 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "app/assets/fonts/icomoon.ttf",
+      "sha1": "8f243a3e819bb5c4a55e40270e5e9f1d2b2bcff0"
+    },
+    {
+      "path": "app/assets/fonts/Merriweather-Black.ttf",
+      "sha1": "88c66bb14b3a385bde006f8605b45aff89c9612b"
+    },
+    {
+      "path": "app/assets/fonts/Merriweather-BlackItalic.ttf",
+      "sha1": "763f746f6bb87f20adf86a987fd13d08408766a1"
+    },
+    {
+      "path": "app/assets/fonts/Merriweather-Bold.ttf",
+      "sha1": "28efe4ae580e7aac679a268003b58aba5a82a877"
+    },
+    {
+      "path": "app/assets/fonts/Merriweather-BoldItalic.ttf",
+      "sha1": "df3dc2b8cbe785798f5b34461953a29cc5fa4b5f"
+    },
+    {
+      "path": "app/assets/fonts/Merriweather-Italic.ttf",
+      "sha1": "568f4f91b1210ec160e509fffca5d157fedacbf4"
+    },
+    {
+      "path": "app/assets/fonts/Merriweather-Light.ttf",
+      "sha1": "008fe3f5da1e77b68398894a62b2dad94e9f50d1"
+    },
+    {
+      "path": "app/assets/fonts/Merriweather-LightItalic.ttf",
+      "sha1": "bbce8854643296bace36a317705263167d54f7c8"
+    },
+    {
+      "path": "app/assets/fonts/Merriweather-Regular.ttf",
+      "sha1": "2cbe1abb3797149d593a90ced7e3c9fa99af50ca"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-Black.ttf",
+      "sha1": "5edd8f0d86bb8a6941fc2fa9ebdc4a1e11d91a9e"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-BlackItalic.ttf",
+      "sha1": "d84d3b6c9ff1a19a42167f3005184fc01a891d26"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-Bold.ttf",
+      "sha1": "6860363db5ea3dc384addbc4ff5d0aaee17b91eb"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-BoldItalic.ttf",
+      "sha1": "3d3325fd881eb52da9dda866fdfb62ce80113bf2"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-ExtraBold.ttf",
+      "sha1": "ea49a620d98dfd1004eaed8874eb2fbf575db8b4"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-ExtraBoldItalic.ttf",
+      "sha1": "207eb011625276a8126bd9335da0504d3f1d6bc0"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-ExtraLight.ttf",
+      "sha1": "1e4b7d71014de005fb93fbf8a12049a313235ed6"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-ExtraLightItalic.ttf",
+      "sha1": "b7d74749f515514d3bd88251d196a300e0445baa"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-Italic.ttf",
+      "sha1": "4459c9dfd0f66afe4256752e256416bba00da40b"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-Light.ttf",
+      "sha1": "557e12899c0c636753aa19259c2cea336e0c927d"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-LightItalic.ttf",
+      "sha1": "ad6a5deb0479184456b5bdb63d32b022d0fbee25"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-Medium.ttf",
+      "sha1": "0c8681407d5de2de363187e7911e790d34d808c1"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-MediumItalic.ttf",
+      "sha1": "8a14d7e102c68ccaa136772d65ae0c53c4278a3d"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-Regular.ttf",
+      "sha1": "1e8694a5ea1ff0e0f8800e5c23470c5132ec9123"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-SemiBold.ttf",
+      "sha1": "d9eeb3f776f8ad1ae98361df8f377b4809d4ae52"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-SemiBoldItalic.ttf",
+      "sha1": "0804298e3917a7bf21fa7cd7e664120e87aec69c"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-Thin.ttf",
+      "sha1": "71beeeaf454a6641d63b1361e1167dd3f1a5b201"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-ThinItalic.ttf",
+      "sha1": "19f8872a77b37eb95e8cd3da99c9e54b3e579d83"
+    },
+    {
+      "path": "app/assets/fonts/Roboto-Black.ttf",
+      "sha1": "ee52f7cf8e54f3ee2afbc474a352d5c19514d9c1"
+    },
+    {
+      "path": "app/assets/fonts/Roboto-BlackItalic.ttf",
+      "sha1": "94ba47a5510d3e21ae4db0da0425b855686de586"
+    },
+    {
+      "path": "app/assets/fonts/Roboto-Bold.ttf",
+      "sha1": "3dd713113ff2d79b94d2df343e2e28fa8e7279cf"
+    },
+    {
+      "path": "app/assets/fonts/Roboto-BoldItalic.ttf",
+      "sha1": "60b9860b7fc93d6b0b322f170634105bc6a8cc8d"
+    },
+    {
+      "path": "app/assets/fonts/Roboto-Italic.ttf",
+      "sha1": "dc6756127707ab2d6e388a6023087351fa41999c"
+    },
+    {
+      "path": "app/assets/fonts/Roboto-Light.ttf",
+      "sha1": "92cc3b6f9440193c12fd02ed690e434d685a9cc8"
+    },
+    {
+      "path": "app/assets/fonts/Roboto-LightItalic.ttf",
+      "sha1": "a0440f60a96a59c4105c3eb639cb2573826f84fe"
+    },
+    {
+      "path": "app/assets/fonts/Roboto-Medium.ttf",
+      "sha1": "f6783010d5def128c4a1539333324f75701d9bab"
+    },
+    {
+      "path": "app/assets/fonts/Roboto-MediumItalic.ttf",
+      "sha1": "e4e31e55d279a9b12c32327a60a3a65c8350e5df"
+    },
+    {
+      "path": "app/assets/fonts/Roboto-Regular.ttf",
+      "sha1": "096c9245b6a192d1403a82848e104a65f578a8ec"
+    },
+    {
+      "path": "app/assets/fonts/Roboto-Thin.ttf",
+      "sha1": "711e666e7f52210ac487c7ed81a0ac68a2b52261"
+    },
+    {
+      "path": "app/assets/fonts/Roboto-ThinItalic.ttf",
+      "sha1": "75ffde032d49005faa643338eda97c311ad7d316"
+    }
+  ]
+}

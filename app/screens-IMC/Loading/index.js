@@ -136,20 +136,30 @@ export default function Loading({navigation}) {
       throw new Error('Failed to check connectivity.');
     }
   };
-
+  // issues about Android -->
   // Check notification permissions
   const _handleNotificationPermissions = async () => {
     console.log('Checking notification permissions');
     await registerDeviceForRemoteMessages(messaging);
     console.log('Device registered successfully.');
-    // const token = await messaging().getToken();
-    // console.log('FCM Token generated:', token);
+   
     console.log('Requesting notification permissions...');
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
-    );
-    console.log("granted Notification", granted);
-    
+
+      // const _handleNotificationPermissions = async () => {
+  //   console.log('Checking notification permissions');
+  //   await registerDeviceForRemoteMessages(messaging);
+  //   console.log('Device registered successfully.');
+   
+  //   console.log('Requesting notification permissions...');
+
+  //   const granted = await PermissionsAndroid.request(
+  //     PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+  //   );
+  //   console.log("granted Notification", granted);
+
+  //   setCurrentStep(5);
+  // };
+
     setCurrentStep(5);
   };
 

@@ -80,18 +80,9 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         const requestData = action.payload?.requestData;
         state.user = {
-          id: requestData.id,
-          name: requestData.name,
-          email: requestData.email,
-          company_name: requestData.company_name,
-          job_function: requestData.job_function,
-          image: requestData.imagePath + requestData.image, // Full image URL
-          phone: requestData.phone,
-          website: requestData.website,
-          language: requestData.language,
-          visitor_profile: requestData.visitor_profile,
-          bio: requestData.bio,
-          speakers: requestData.speakers,
+          ...requestData,
+          image: requestData.imagePath && requestData.image ? requestData.imagePath + requestData.image : requestData.image, // Full image URL
+          imagePath: requestData.imagePath && requestData.image ? requestData.imagePath + requestData.image : requestData.imagePath, // Full image URL
         };
         state.notifications = action.payload.notificationData;
         state.permissions = action.payload.permissions;
@@ -110,7 +101,12 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(checkAuth.fulfilled, (state, action) => {
-        state.user = action.payload.user;
+        const requestData = action.payload.user;
+        state.user = requestData ? {
+          ...requestData,
+          image: requestData.imagePath && requestData.image ? requestData.imagePath + requestData.image : requestData.image,
+          imagePath: requestData.imagePath && requestData.image ? requestData.imagePath + requestData.image : requestData.imagePath,
+        } : null;
         state.permissions = action.payload.permissions;
         state.notifications = action.payload.notifications;
         state.type = action.payload.type;
