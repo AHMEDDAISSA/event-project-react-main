@@ -14,7 +14,8 @@ import {useTranslation} from 'react-i18next';
 import {getVisitorDetails, addInterestToVisitor} from '../../services/visitorService';
 import LottieView from 'lottie-react-native';
 import ToastUtils from '../../config/toastUtils';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import {saveContact, removeContact, optimisticSave, optimisticRemove} from '../../reducers/contactsSlice';
 import NetInfo from '@react-native-community/netinfo';
 import useAndroidBack from '../../hooks/useAndroidBack';
 
@@ -24,6 +25,8 @@ export default function VisitorDetail({navigation, route}) {
   const {colors} = useTheme();
   const {t} = useTranslation();
   const {user, permissions} = useSelector(state => state.auth);
+  const {savedIds, saving} = useSelector(state => state.contacts);
+  const dispatch = useDispatch();
 
   // Handle No Internet Connection
   useEffect(() => {
@@ -349,6 +352,51 @@ export default function VisitorDetail({navigation, route}) {
             }}>
             <Icon name="calendar-month" size={20} color={BaseColor.whiteColor} />
           </Button>
+
+          {/* ── Save Contact Button ─────────────────────────────── */}
+          {visitorDetails?.id !== user?.id && (
+            <Button
+              style={[
+                {
+                  backgroundColor: savedIds[`visitor_${id}`] ? '#10B981' : BaseColor.whiteColor,
+                  borderColor: savedIds[`visitor_${id}`] ? '#10B981' : colors.primary,
+                  borderWidth: 1,
+                  minWidth: 50,
+                },
+              ]}
+              loading={!!saving[`visitor_${id}`]}
+              disabled={!!saving[`visitor_${id}`]}
+              onPress={async () => {
+                const contactType = 'visitor';
+                const key = `${contactType}_${id}`;
+                const isSaved = savedIds[key];
+                if (isSaved) {
+                  dispatch(optimisticRemove({contactId: id, contactType}));
+                  const result = await dispatch(removeContact({contactId: id, contactType}));
+                  if (removeContact.fulfilled.match(result)) {
+                    ToastUtils.showSuccessToast(t('success'), t('contact_removed'));
+                  } else {
+                    ToastUtils.showErrorToast(t('error'), t('contact_remove_error'));
+                  }
+                } else {
+                  dispatch(optimisticSave({contactId: id, contactType}));
+                  const result = await dispatch(saveContact({contactId: id, contactType}));
+                  if (saveContact.fulfilled.match(result)) {
+                    ToastUtils.showSuccessToast(t('success'), t('contact_saved'));
+                  } else {
+                    ToastUtils.showErrorToast(t('error'), t('contact_save_error'));
+                  }
+                }
+              }}>
+              {!saving[`visitor_${id}`] && (
+                <Icon
+                  name={savedIds[`visitor_${id}`] ? 'bookmark' : 'bookmark-border'}
+                  size={20}
+                  color={savedIds[`visitor_${id}`] ? '#fff' : colors.primary}
+                />
+              )}
+            </Button>
+          )}
         </View>
       </SafeAreaView>
     </View>

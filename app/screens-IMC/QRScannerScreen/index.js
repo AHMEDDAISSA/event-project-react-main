@@ -4,10 +4,14 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useTheme } from '../../config';
 import { useTranslation } from 'react-i18next';
 import { Header, SafeAreaView, Icon, Text, Button } from '../../components';
+import { useDispatch } from 'react-redux';
+import { saveContact, optimisticSave } from '../../reducers/contactsSlice';
+import ToastUtils from '../../config/toastUtils';
 
 export default function QRScannerScreen({ navigation }) {
   const { colors } = useTheme();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
 
@@ -55,11 +59,36 @@ export default function QRScannerScreen({ navigation }) {
         const userId = parseInt(parts[2], 10);
 
         if (!isNaN(userId)) {
+          const promptSave = (contactType, targetId) => {
+            Alert.alert(
+              t('save_contact_prompt_title'),
+              t('save_contact_prompt_desc'),
+              [
+                {
+                  text: t('save'),
+                  onPress: () => {
+                    dispatch(optimisticSave({contactId: targetId, contactType}));
+                    dispatch(saveContact({contactId: targetId, contactType}))
+                      .then(result => {
+                        if (saveContact.fulfilled.match(result)) {
+                          ToastUtils.showSuccessToast(t('success'), t('contact_saved'));
+                        }
+                      });
+                  },
+                },
+                {text: t('skip'), style: 'cancel'},
+              ],
+              {cancelable: true},
+            );
+          };
+
           if (userType === 'exhibitor') {
             navigation.replace('ExhibitorDetail', { id: userId, isExhibitor: true });
+            promptSave('exhibitor', userId);
             return;
           } else if (userType === 'visitor') {
             navigation.replace('VisitorDetail', { id: userId });
+            promptSave('visitor', userId);
             return;
           }
         }
