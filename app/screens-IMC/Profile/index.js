@@ -95,7 +95,57 @@ export default function Profile({navigation}) {
               centered={true}
             />
 
+            {/* ── My QR Code ────────────────────────────────────── */}
+            <TouchableOpacity
+              style={[
+                styles.profileItem,
+                {borderBottomColor: colors.border, borderBottomWidth: 1},
+              ]}
+              onPress={() => navigation.navigate('MyQRCodeScreen')}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Icon
+                  name="qr-code-2"
+                  size={18}
+                  color={colors.primary}
+                  style={{marginRight: 5}}
+                  enableRTL={true}
+                />
+                <Text body1>{t('my_qr_code')}</Text>
+              </View>
+              <Icon
+                name="chevron-right"
+                size={18}
+                color={colors.primary}
+                style={{marginLeft: 5}}
+                enableRTL={true}
+              />
+            </TouchableOpacity>
 
+            {/* ── My Contacts ───────────────────────────────────── */}
+            <TouchableOpacity
+              style={[
+                styles.profileItem,
+                {borderBottomColor: colors.border, borderBottomWidth: 1},
+              ]}
+              onPress={() => navigation.navigate('MyContactsScreen')}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Icon
+                  name="bookmark"
+                  size={18}
+                  color={colors.primary}
+                  style={{marginRight: 5}}
+                  enableRTL={true}
+                />
+                <Text body1>{t('my_contacts')}</Text>
+              </View>
+              <Icon
+                name="chevron-right"
+                size={18}
+                color={colors.primary}
+                style={{marginLeft: 5}}
+                enableRTL={true}
+              />
+            </TouchableOpacity>
             {
               type == 'exhibitor' && (
                 <TouchableOpacity

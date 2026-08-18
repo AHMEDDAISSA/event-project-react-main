@@ -12,6 +12,8 @@ const persistConfig = {
   key: "root_ditte",
   storage: AsyncStorage,
   timeout: 10000,
+  // contacts are always fetched fresh from server — never persist stale state
+  blacklist: ["contacts"],
 };
 
 let middleware = [thunk];
