@@ -50,4 +50,8 @@ export const ApiPaths = {
   acceptVMeeting: 'user/virtual_meeting/accept',
   refuseVMeeting: 'user/virtual_meeting/refus',
   cancelVMeeting: 'user/virtual_meeting/cancel',
+  // Contacts (My Event Passport)
+  saveContact: 'user/contacts/save',
+  getContacts: 'user/contacts',
+  removeContact: 'user/contacts/remove',
 };

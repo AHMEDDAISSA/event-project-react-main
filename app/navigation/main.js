@@ -52,6 +52,8 @@ import NoInternetScreen from "../screens-IMC/NoInternetScreen";
 import SponsorDetail from "../screens-IMC/SponsorDetail";
 import MySpeakersScreen from "../screens-IMC/MySpeakersScreen";
 import QRScannerScreen from "../screens-IMC/QRScannerScreen";
+import MyQRCodeScreen from "../screens-IMC/MyQRCodeScreen";
+import MyContactsScreen from "../screens-IMC/MyContactsScreen";
 
 const MainStack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -124,6 +126,8 @@ export default function Main() {
       <MainStack.Screen name="SponsorDetail" component={SponsorDetail} />
       <MainStack.Screen name="MySpeakersScreen" component={MySpeakersScreen} />
       <MainStack.Screen name="QRScannerScreen" component={QRScannerScreen} />
+      <MainStack.Screen name="MyQRCodeScreen" component={MyQRCodeScreen} />
+      <MainStack.Screen name="MyContactsScreen" component={MyContactsScreen} />
     </MainStack.Navigator>
   );
 }

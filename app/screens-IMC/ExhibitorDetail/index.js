@@ -15,9 +15,11 @@ import {useTranslation} from 'react-i18next';
 import {getExhibitorDetails, addInterest} from '../../services/homePageService';
 import LottieView from 'lottie-react-native';
 import ToastUtils from '../../config/toastUtils';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import {saveContact, removeContact, optimisticSave, optimisticRemove} from '../../reducers/contactsSlice';
 import NetInfo from '@react-native-community/netinfo';
 import useAndroidBack from '../../hooks/useAndroidBack';
+
 
 export default function ExhibitorDetail({navigation, route}) {
   const {id, isExhibitor} = route.params;
@@ -25,6 +27,8 @@ export default function ExhibitorDetail({navigation, route}) {
   const {colors} = useTheme();
   const {t} = useTranslation();
   const {user, permissions} = useSelector(state => state.auth);
+  const {savedIds, saving} = useSelector(state => state.contacts);
+  const dispatch = useDispatch();
 
   // Handle No Internet Connection
   useEffect(() => {
@@ -429,6 +433,55 @@ export default function ExhibitorDetail({navigation, route}) {
                 size={20}
                 color={BaseColor.whiteColor}
               />
+            </Button>
+          )}
+
+          {/* ── Save Contact Button ─────────────────────────────── */}
+          {exhibitorDetails?.id !== user?.id && (
+            <Button
+              style={[
+                styles.meetingButton,
+                {
+                  backgroundColor: savedIds[`${isExhibitor ? 'exhibitor' : 'visitor'}_${id}`]
+                    ? '#10B981'
+                    : BaseColor.whiteColor,
+                  borderColor: savedIds[`${isExhibitor ? 'exhibitor' : 'visitor'}_${id}`]
+                    ? '#10B981'
+                    : colors.primary,
+                  borderWidth: 1,
+                },
+              ]}
+              loading={!!saving[`${isExhibitor ? 'exhibitor' : 'visitor'}_${id}`]}
+              disabled={!!saving[`${isExhibitor ? 'exhibitor' : 'visitor'}_${id}`]}
+              onPress={async () => {
+                const contactType = isExhibitor ? 'exhibitor' : 'visitor';
+                const key = `${contactType}_${id}`;
+                const isSaved = savedIds[key];
+                if (isSaved) {
+                  dispatch(optimisticRemove({contactId: id, contactType}));
+                  const result = await dispatch(removeContact({contactId: id, contactType}));
+                  if (removeContact.fulfilled.match(result)) {
+                    ToastUtils.showSuccessToast(t('success'), t('contact_removed'));
+                  } else {
+                    ToastUtils.showErrorToast(t('error'), t('contact_remove_error'));
+                  }
+                } else {
+                  dispatch(optimisticSave({contactId: id, contactType}));
+                  const result = await dispatch(saveContact({contactId: id, contactType}));
+                  if (saveContact.fulfilled.match(result)) {
+                    ToastUtils.showSuccessToast(t('success'), t('contact_saved'));
+                  } else {
+                    ToastUtils.showErrorToast(t('error'), t('contact_save_error'));
+                  }
+                }
+              }}>
+              {!saving[`${isExhibitor ? 'exhibitor' : 'visitor'}_${id}`] && (
+                <Icon
+                  name={savedIds[`${isExhibitor ? 'exhibitor' : 'visitor'}_${id}`] ? 'bookmark' : 'bookmark-border'}
+                  size={20}
+                  color={savedIds[`${isExhibitor ? 'exhibitor' : 'visitor'}_${id}`] ? '#fff' : colors.primary}
+                />
+              )}
             </Button>
           )}
         </View>
