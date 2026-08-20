@@ -212,35 +212,7 @@ export default function Profile({navigation}) {
                 </TouchableOpacity>
               )
             }
-            <TouchableOpacity
-              style={[
-                styles.profileItem,
-                {
-                  borderBottomColor: colors.border,
-                  borderBottomWidth: 1,
-                },
-              ]}
-              onPress={() => {
-                navigation.navigate('InterestedInYou');
-              }}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Icon
-                  name="sentiment-very-satisfied"
-                  size={18}
-                  color={colors.primary}
-                  style={{marginRight: 5}}
-                  enableRTL={true}
-                />
-                <Text body1>{t('intersted_in_you')}</Text>
-              </View>
-              <Icon
-                name="chevron-right"
-                size={18}
-                color={colors.primary}
-                style={{marginLeft: 5}}
-                enableRTL={true}
-              />
-            </TouchableOpacity>
+
             {hasConnectionPermission(permissions) && (
               <TouchableOpacity
                 style={[
