@@ -48,7 +48,7 @@ export default function InterestsScreen({navigation}) {
     current_page: 1,
     last_page: 1,
     total: 0,
-    per_page: 10,
+    per_page: 4,
   });
 
   const isMounted = useRef(false);
@@ -68,16 +68,19 @@ export default function InterestsScreen({navigation}) {
   useAndroidBack();
 
   useFocusEffect(
-  useCallback(() => {
-    fetchInterests(pagination.current_page, searchText);
-  }, []),
-);
+    useCallback(() => {
+      fetchInterests(1, searchText, true);
+    }, []),
+  );
 
-  const fetchInterests = async (page, search = searchText) => {
-    setExhibitors([]);
+  const fetchInterests = async (clientPage, search = searchText, shouldReset = false) => {
+    const serverPage = Math.ceil((clientPage * 4) / 10);
+    if (serverPage === 1 || shouldReset) {
+      setExhibitors([]);
+    }
     setLoading(true);
     try {
-      const response = await getMyInterstedList(page, search);
+      const response = await getMyInterstedList(serverPage, search, 10);
       if (response.code == 200) {
         setLoading(false);
         if (type == 'exhibitor') {
@@ -96,7 +99,15 @@ export default function InterestsScreen({navigation}) {
             };
           });
 
-          setExhibitors(processedExhibitors);
+          if (serverPage === 1 || shouldReset) {
+            setExhibitors(processedExhibitors);
+          } else {
+            setExhibitors(prev => {
+              const existingIds = new Set(prev.map(item => item.id));
+              const uniqueNew = processedExhibitors.filter(item => !existingIds.has(item.id));
+              return [...prev, ...uniqueNew];
+            });
+          }
 
           // Initialize liked state - true if followers contains 'userID'
           const initialLikesVisitors = processedExhibitors.reduce((acc, visitor) => {
@@ -123,7 +134,15 @@ export default function InterestsScreen({navigation}) {
             };
           });
 
-          setExhibitors(processedExhibitors);
+          if (serverPage === 1 || shouldReset) {
+            setExhibitors(processedExhibitors);
+          } else {
+            setExhibitors(prev => {
+              const existingIds = new Set(prev.map(item => item.id));
+              const uniqueNew = processedExhibitors.filter(item => !existingIds.has(item.id));
+              return [...prev, ...uniqueNew];
+            });
+          }
 
           // Initialize liked state - true if followers contains 'userID'
           const initialLikesExhibitors = processedExhibitors.reduce((acc, exhibitor) => {
@@ -135,18 +154,23 @@ export default function InterestsScreen({navigation}) {
         }
         
 
+        const totalItems = response.meta.total;
         setPagination({
-          current_page: response.meta.current_page,
-          last_page: response.meta.last_page,
-          total: response.meta.total,
-          per_page: response.meta.per_page,
+          current_page: clientPage,
+          last_page: Math.ceil(totalItems / 4),
+          total: totalItems,
+          per_page: 4,
         });
       } else {
-        setExhibitors([]);
+        if (serverPage === 1 || shouldReset) {
+          setExhibitors([]);
+        }
       }
     } catch (error) {
       console.error('Error fetching interests:', error);
-      setExhibitors([]);
+      if (serverPage === 1 || shouldReset) {
+        setExhibitors([]);
+      }
     } finally {
       setLoading(false);
     }
@@ -429,14 +453,23 @@ export default function InterestsScreen({navigation}) {
   };
 
   const handlePageChange = async page => {
-  if (page > 0 && page <= pagination.last_page) {
-    setPagination(prev => ({
-      ...prev,
-      current_page: page,
-    }));
-    await fetchInterests(page, searchText);
-  }
-};
+    if (page > 0 && page <= pagination.last_page) {
+      const serverPageNeeded = Math.ceil((page * 4) / 10);
+      const requiredItemsCount = page * 4;
+      
+      if (exhibitors.length < requiredItemsCount && serverPageNeeded <= Math.ceil(pagination.total / 10)) {
+        await fetchInterests(page, searchText, false);
+      } else {
+        setPagination(prev => ({
+          ...prev,
+          current_page: page,
+        }));
+      }
+    }
+  };
+
+  const startIndex = (pagination.current_page - 1) * 4;
+  const displayedExhibitors = exhibitors.slice(startIndex, startIndex + 4);
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -505,7 +538,7 @@ export default function InterestsScreen({navigation}) {
           ) : (
             <>
               <FlatList
-                data={exhibitors}
+                data={displayedExhibitors}
                 renderItem={renderItem}
                 keyExtractor={item => item.id.toString()}
                 contentContainerStyle={{flexGrow: 1, paddingBottom: 20}}
