@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useTheme } from '../../config';
@@ -14,7 +14,7 @@ export default function QRScannerScreen({ navigation }) {
   const dispatch = useDispatch();
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
-
+  const scannedRef = useRef(false);
   // Request camera permission on mount
   useEffect(() => {
     if (!permission) {
@@ -46,16 +46,14 @@ export default function QRScannerScreen({ navigation }) {
   }
 
   const handleBarCodeScanned = ({ type, data }) => {
-    if (scanned) return;
+    if (scannedRef.current) return;   
+    scannedRef.current = true;
     setScanned(true);
 
-    // Parse the QR Code data
-    // Format: imc-event:<type>:<id>
-    // e.g., imc-event:exhibitor:45 or imc-event:visitor:12
     if (data && data.startsWith('imc-event:')) {
       const parts = data.split(':');
       if (parts.length === 3) {
-        const userType = parts[1]; // 'exhibitor' or 'visitor'
+        const userType = parts[1];
         const userId = parseInt(parts[2], 10);
 
         if (!isNaN(userId)) {
@@ -67,44 +65,55 @@ export default function QRScannerScreen({ navigation }) {
                 {
                   text: t('save'),
                   onPress: () => {
-                    dispatch(optimisticSave({contactId: targetId, contactType}));
-                    dispatch(saveContact({contactId: targetId, contactType}))
+                    dispatch(optimisticSave({ contactId: targetId, contactType }));
+                    dispatch(saveContact({ contactId: targetId, contactType }))
                       .then(result => {
                         if (saveContact.fulfilled.match(result)) {
                           ToastUtils.showSuccessToast(t('success'), t('contact_saved'));
                         }
                       });
+                    goToDetail(contactType, targetId);
                   },
                 },
-                {text: t('skip'), style: 'cancel'},
+                {
+                  text: t('skip'),
+                  style: 'cancel',
+                  onPress: () => {
+                    goToDetail(contactType, targetId);
+                  },
+                },
               ],
-              {cancelable: true},
+              { cancelable: true },
             );
           };
 
-          if (userType === 'exhibitor') {
-            navigation.replace('ExhibitorDetail', { id: userId, isExhibitor: true });
-            promptSave('exhibitor', userId);
-            return;
-          } else if (userType === 'visitor') {
-            navigation.replace('VisitorDetail', { id: userId });
-            promptSave('visitor', userId);
+          const goToDetail = (contactType, targetId) => {
+            if (contactType === 'exhibitor') {
+              navigation.replace('ExhibitorDetail', { id: targetId, isExhibitor: true });
+            } else {
+              navigation.replace('VisitorDetail', { id: targetId });
+            }
+          };
+
+          if (userType === 'exhibitor' || userType === 'visitor') {
+            promptSave(userType, userId);
             return;
           }
         }
       }
     }
 
-    // Invalid QR code format fallback
+    
     Alert.alert(
       t('invalid_qr_code') || 'Invalid QR Code',
       t('invalid_qr_code_desc') || 'This QR Code is not recognized by the IMC Events app.',
-      [
-        {
-          text: 'OK',
-          onPress: () => setScanned(false),
+      [{
+        text: 'OK',
+        onPress: () => {
+          scannedRef.current = false; 
+          setScanned(false);
         },
-      ]
+      }]
     );
   };
 
@@ -137,7 +146,7 @@ export default function QRScannerScreen({ navigation }) {
           </View>
           <View style={styles.unfocusedContainer}>
             <Text style={styles.helperText}>
-              {t('scan_helper_text') || 'Center the QR code inside the square to scan'}
+              {t('scan_helper_text')}
             </Text>
           </View>
         </View>

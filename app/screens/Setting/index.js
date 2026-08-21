@@ -1,15 +1,15 @@
-import React, {useState} from 'react';
-import {useSelector} from 'react-redux';
-import {View, TouchableOpacity, Switch, ScrollView} from 'react-native';
-import {BaseStyle, BaseSetting, useTheme} from '../../config';
-import {Header, SafeAreaView, Icon, Text} from '../../components';
-import {useTranslation} from 'react-i18next';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { View, TouchableOpacity, Switch, ScrollView } from 'react-native';
+import { BaseStyle, BaseSetting, useTheme } from '../../config';
+import { Header, SafeAreaView, Icon, Text } from '../../components';
+import { useTranslation } from 'react-i18next';
 import * as Utils from '../../utils';
 import styles from './styles';
 
-export default function Setting({navigation}) {
-  const {t, i18n} = useTranslation();
-  const {colors} = useTheme();
+export default function Setting({ navigation }) {
+  const { t, i18n } = useTranslation();
+  const { colors } = useTheme();
   const forceDark = useSelector(state => state.application.force_dark);
   const font = useSelector(state => state.application.font);
 
@@ -22,10 +22,14 @@ export default function Setting({navigation}) {
     setReminders(value);
   };
 
-
+  const darkOption = forceDark
+    ? t('always_on')
+    : forceDark != null
+      ? t('always_off')
+      : t('dynamic_system');
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <Header
         title={t('setting')}
         renderLeft={() => {
@@ -49,7 +53,7 @@ export default function Setting({navigation}) {
           <TouchableOpacity
             style={[
               styles.profileItem,
-              {borderBottomColor: colors.border, borderBottomWidth: 1},
+              { borderBottomColor: colors.border, borderBottomWidth: 1 },
             ]}
             onPress={() => {
               navigation.navigate('ChangeLanguage');
@@ -67,7 +71,7 @@ export default function Setting({navigation}) {
                 name="keyboard-arrow-right"
                 size={18}
                 color={colors.primary}
-                style={{marginLeft: 5}}
+                style={{ marginLeft: 5 }}
                 enableRTL={true}
               />
             </View>
@@ -88,7 +92,7 @@ export default function Setting({navigation}) {
           <TouchableOpacity
             style={[
               styles.profileItem,
-              {borderBottomColor: colors.border, borderBottomWidth: 1},
+              { borderBottomColor: colors.border, borderBottomWidth: 1 },
             ]}
             onPress={() => navigation.navigate('SelectFontOption')}>
             <Text body1>{t('font')}</Text>
@@ -104,12 +108,37 @@ export default function Setting({navigation}) {
                 name="keyboard-arrow-right"
                 size={18}
                 color={colors.primary}
-                style={{marginLeft: 5}}
+                style={{ marginLeft: 5 }}
                 enableRTL={true}
               />
             </View>
           </TouchableOpacity>
-
+          <TouchableOpacity
+            style={[
+              styles.profileItem,
+              { borderBottomColor: colors.border, borderBottomWidth: 1 },
+            ]}
+            onPress={() => {
+              navigation.navigate('SelectDarkOption');
+            }}>
+            <Text body1>{t('dark_theme')}</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Text body1 grayColor>
+                {darkOption}
+              </Text>
+              <Icon
+                name="keyboard-arrow-right"
+                size={18}
+                color={colors.primary}
+                style={{ marginLeft: 5 }}
+                enableRTL={true}
+              />
+            </View>
+          </TouchableOpacity>
           {/* <View
             style={[
               styles.profileItem,

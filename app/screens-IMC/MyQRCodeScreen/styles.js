@@ -127,6 +127,19 @@ export default StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
   },
+  scanButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 14,
+    borderRadius: 14,
+    borderWidth: 1,
+    marginTop: 12,
+  },
+  scanButtonText: {
+    fontSize: 16,
+    fontWeight: '700',
+  },
   shareBtn: {
     padding: 4,
   },

@@ -1,4 +1,4 @@
-import React, {useRef, useEffect} from 'react';
+import React, { useRef, useEffect } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -8,18 +8,18 @@ import {
   StatusBar,
 } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-import {useSelector} from 'react-redux';
-import {useTheme} from '../../config';
-import {Header, SafeAreaView, Icon, Text} from '../../components';
-import {useTranslation} from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { useTheme } from '../../config';
+import { Header, SafeAreaView, Icon, Text } from '../../components';
+import { useTranslation } from 'react-i18next';
 import styles from './styles';
 import useAndroidBack from '../../hooks/useAndroidBack';
 import NetInfo from '@react-native-community/netinfo';
 
-export default function MyQRCodeScreen({navigation}) {
-  const {colors} = useTheme();
-  const {t} = useTranslation();
-  const {user, type} = useSelector(state => state.auth);
+export default function MyQRCodeScreen({ navigation }) {
+  const { colors } = useTheme();
+  const { t } = useTranslation();
+  const { user, type } = useSelector(state => state.auth);
 
   useAndroidBack();
 
@@ -88,7 +88,7 @@ export default function MyQRCodeScreen({navigation}) {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: colors.background}}>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <Header
         title={t('my_qr_code')}
         renderLeft={() => (
@@ -102,15 +102,15 @@ export default function MyQRCodeScreen({navigation}) {
         )}
       />
 
-      <SafeAreaView style={{flex: 1}} edges={['left', 'right', 'bottom']}>
+      <SafeAreaView style={{ flex: 1 }} edges={['left', 'right', 'bottom']}>
         <View style={styles.container}>
           {/* Subtitle */}
           <Animated.View
             style={[
               styles.subtitleRow,
-              {opacity: opacityAnim, transform: [{translateY: slideAnim}]},
+              { opacity: opacityAnim, transform: [{ translateY: slideAnim }] },
             ]}>
-            <Text body2 style={[styles.subtitle, {color: colors.text}]}>
+            <Text body2 style={[styles.subtitle, { color: colors.text }]}>
               {t('qr_subtitle')}
             </Text>
           </Animated.View>
@@ -122,12 +122,12 @@ export default function MyQRCodeScreen({navigation}) {
               {
                 backgroundColor: colors.card,
                 borderColor: colors.border,
-                transform: [{scale: scaleAnim}],
+                transform: [{ scale: scaleAnim }],
                 opacity: opacityAnim,
               },
             ]}>
             {/* Decorative top strip */}
-            <View style={[styles.cardTopStrip, {backgroundColor: colors.primary}]}>
+            <View style={[styles.cardTopStrip, { backgroundColor: colors.primary }]}>
               <Text
                 style={styles.cardTopLabel}
                 numberOfLines={1}>
@@ -153,34 +153,34 @@ export default function MyQRCodeScreen({navigation}) {
             </View>
 
             {/* Divider */}
-            <View style={[styles.divider, {backgroundColor: colors.border}]} />
+            <View style={[styles.divider, { backgroundColor: colors.border }]} />
 
             {/* User Info */}
             <View style={styles.infoBlock}>
               {/* Role badge */}
-              <View style={[styles.roleBadge, {backgroundColor: `${colors.primary}18`}]}>
+              <View style={[styles.roleBadge, { backgroundColor: `${colors.primary}18` }]}>
                 <Icon
                   name={type === 'exhibitor' ? 'business' : 'person'}
                   size={13}
                   color={colors.primary}
-                  style={{marginRight: 5}}
+                  style={{ marginRight: 5 }}
                 />
                 <Text
-                  style={[styles.roleText, {color: colors.primary}]}
+                  style={[styles.roleText, { color: colors.primary }]}
                   numberOfLines={1}>
                   {type === 'exhibitor' ? t('exhibitor_label') : t('visitor_label')}
                 </Text>
               </View>
 
               <Text
-                style={[styles.nameText, {color: colors.text}]}
+                style={[styles.nameText, { color: colors.text }]}
                 numberOfLines={1}>
                 {displayName}
               </Text>
 
               {displayCompany ? (
                 <Text
-                  style={[styles.companyText, {color: colors.primary}]}
+                  style={[styles.companyText, { color: colors.primary }]}
                   numberOfLines={1}>
                   {displayCompany}
                 </Text>
@@ -190,7 +190,7 @@ export default function MyQRCodeScreen({navigation}) {
                 <View style={styles.locationRow}>
                   <Icon name="location-on" size={13} color={colors.text} />
                   <Text
-                    style={[styles.locationText, {color: colors.text}]}
+                    style={[styles.locationText, { color: colors.text }]}
                     numberOfLines={1}>
                     {hallStand}
                   </Text>
@@ -199,24 +199,33 @@ export default function MyQRCodeScreen({navigation}) {
             </View>
           </Animated.View>
 
-          {/* Hint text */}
-          <Animated.View style={{opacity: opacityAnim, marginTop: 24}}>
+
+          <Animated.View style={{ opacity: opacityAnim, marginTop: 24 }}>
             <Text
               body2
-              style={[styles.hintText, {color: colors.text}]}>
+              style={[styles.hintText, { color: colors.text }]}>
               {t('qr_hint')}
             </Text>
           </Animated.View>
 
-          {/* Share Button */}
+
           <Animated.View
-            style={[styles.shareButtonWrapper, {opacity: opacityAnim, transform: [{translateY: slideAnim}]}]}>
+            style={[styles.shareButtonWrapper, { opacity: opacityAnim, transform: [{ translateY: slideAnim }] }]}>
             <TouchableOpacity
-              style={[styles.shareButton, {backgroundColor: colors.primary}]}
+              style={[styles.shareButton, { backgroundColor: colors.primary }]}
               onPress={handleShare}
               activeOpacity={0.85}>
-              <Icon name="share" size={18} color="#fff" style={{marginRight: 8}} />
+              <Icon name="share" size={18} color="#fff" style={{ marginRight: 8 }} />
               <Text style={styles.shareButtonText}>{t('share_qr')}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.scanButton, { borderColor: colors.primary }]}
+              onPress={() => navigation.navigate('QRScannerScreen')}
+              activeOpacity={0.85}>
+              <Icon name="qr-code-scanner" size={20} color={colors.primary} style={{ marginRight: 8 }} />
+              <Text style={[styles.scanButtonText, { color: colors.primary }]}>
+                {t('scan_qr_code')}
+              </Text>
             </TouchableOpacity>
           </Animated.View>
         </View>

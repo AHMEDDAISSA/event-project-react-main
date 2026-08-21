@@ -12,23 +12,9 @@ if (
 }
 
 import React, {useState, useCallback, useEffect} from 'react';
-import {
-  View,
-  FlatList,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from 'react-native';
+import {View,FlatList,TouchableWithoutFeedback,Keyboard} from 'react-native';
 import {BaseColor, BaseStyle, useTheme, Images} from '../../config';
-import {
-  Header,
-  SafeAreaView,
-  Icon,
-  Text,
-  ProfileDetail,
-  TextInput,
-  Pagination,
-  ActionButton,
-} from '../../components';
+import {Header,SafeAreaView,Icon,Text,ProfileDetail,TextInput,Pagination,ActionButton,} from '../../components';
 import styles from './styles';
 import {useTranslation} from 'react-i18next';
 import {useFocusEffect} from '@react-navigation/native';
