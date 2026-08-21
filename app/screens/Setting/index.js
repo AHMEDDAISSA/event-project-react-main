@@ -22,11 +22,7 @@ export default function Setting({navigation}) {
     setReminders(value);
   };
 
-  const darkOption = forceDark
-    ? t('always_on')
-    : forceDark != null
-    ? t('always_off')
-    : t('dynamic_system');
+
 
   return (
     <View style={{flex: 1}}>
@@ -113,32 +109,7 @@ export default function Setting({navigation}) {
               />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.profileItem,
-              {borderBottomColor: colors.border, borderBottomWidth: 1},
-            ]}
-            onPress={() => {
-              navigation.navigate('SelectDarkOption');
-            }}>
-            <Text body1>{t('dark_theme')}</Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}>
-              <Text body1 grayColor>
-                {darkOption}
-              </Text>
-              <Icon
-                name="keyboard-arrow-right"
-                size={18}
-                color={colors.primary}
-                style={{marginLeft: 5}}
-                enableRTL={true}
-              />
-            </View>
-          </TouchableOpacity>
+
           {/* <View
             style={[
               styles.profileItem,

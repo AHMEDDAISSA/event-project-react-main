@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
-import {View, TouchableOpacity, Switch, ScrollView} from 'react-native';
+import {View, TouchableOpacity, Switch, ScrollView,} from 'react-native';
 import {BaseStyle, BaseSetting, useTheme} from '../../config';
 import {Header, SafeAreaView, Icon, Text} from '../../components';
 import {useTranslation} from 'react-i18next';
@@ -23,11 +23,7 @@ export default function Setting({navigation}) {
     setReminders(value);
   };
 
-  const darkOption = forceDark
-    ? t('always_on')
-    : forceDark != null
-    ? t('always_off')
-    : t('dynamic_system');
+
 
   // Handle No Internet Connection  
   useEffect(() => {
@@ -126,32 +122,7 @@ export default function Setting({navigation}) {
               />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.profileItem,
-              {borderBottomColor: colors.border, borderBottomWidth: 1},
-            ]}
-            onPress={() => {
-              navigation.navigate('SelectDarkOption');
-            }}>
-            <Text body1>{t('dark_theme')}</Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}>
-              <Text body1 grayColor>
-                {darkOption}
-              </Text>
-              <Icon
-                name="chevron-right"
-                size={18}
-                color={colors.primary}
-                style={{marginLeft: 5}}
-                enableRTL={true}
-              />
-            </View>
-          </TouchableOpacity>
+
           <View
             style={[
               styles.profileItem,

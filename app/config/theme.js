@@ -276,14 +276,8 @@ export const useTheme = () => {
     item => item.theme === (themeStorage ?? DefaultTheme.theme),
   );
 
-  // force the dark mode 
-  const selectedTheme = forceDark === true
-    ? theme.dark
-    : forceDark === false
-    ? theme.light
-    : isDarkMode
-    ? theme.dark
-    : theme.light;
+  // force the dark mode to always follow the system
+  const selectedTheme = isDarkMode ? theme.dark : theme.light;
 
   return {
     theme: {
