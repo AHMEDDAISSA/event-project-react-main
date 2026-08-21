@@ -1,5 +1,5 @@
-import {useSelector} from 'react-redux';
-import {useColorScheme} from 'react-native';
+import { useSelector } from 'react-redux';
+import { useColorScheme } from 'react-native';
 import { DefaultTheme as NavigationDefaultTheme } from '@react-navigation/native';
 
 /**
@@ -38,9 +38,9 @@ export const ThemeSupport = [
         card: '#F5F5F5',
         text: '#212121',
         border: '#c7c7cc',
-        disabled: '#cccccc', 
-        disabledText: '#888888', 
-        buttonText: '#ffffff', 
+        disabled: '#cccccc',
+        disabledText: '#888888',
+        buttonText: '#ffffff',
         danger: '#E5634D',
       },
     },
@@ -75,9 +75,9 @@ export const ThemeSupport = [
         card: '#F5F5F5',
         text: '#212121',
         border: '#c7c7cc',
-        disabled: '#cccccc', 
-        disabledText: '#888888', 
-        buttonText: '#ffffff', 
+        disabled: '#cccccc',
+        disabledText: '#888888',
+        buttonText: '#ffffff',
         danger: '#E5634D',
       },
     },
@@ -92,9 +92,9 @@ export const ThemeSupport = [
         card: '#121212',
         text: '#e5e5e7',
         border: '#272729',
-        disabled: '#cccccc', 
-        disabledText: '#888888', 
-        buttonText: '#ffffff', 
+        disabled: '#cccccc',
+        disabledText: '#888888',
+        buttonText: '#ffffff',
         danger: '#E5634D',
       },
     },
@@ -112,9 +112,9 @@ export const ThemeSupport = [
         card: '#F5F5F5',
         text: '#212121',
         border: '#c7c7cc',
-        disabled: '#cccccc', 
-        disabledText: '#888888', 
-        buttonText: '#ffffff', 
+        disabled: '#cccccc',
+        disabledText: '#888888',
+        buttonText: '#ffffff',
         danger: '#E5634D',
       },
     },
@@ -129,9 +129,9 @@ export const ThemeSupport = [
         card: '#121212',
         text: '#e5e5e7',
         border: '#272729',
-        disabled: '#cccccc', 
-        disabledText: '#888888', 
-        buttonText: '#ffffff', 
+        disabled: '#cccccc',
+        disabledText: '#888888',
+        buttonText: '#ffffff',
         danger: '#E5634D',
       },
     },
@@ -149,9 +149,9 @@ export const ThemeSupport = [
         card: '#F5F5F5',
         text: '#212121',
         border: '#c7c7cc',
-        disabled: '#cccccc', 
-        disabledText: '#888888', 
-        buttonText: '#ffffff', 
+        disabled: '#cccccc',
+        disabledText: '#888888',
+        buttonText: '#ffffff',
         danger: '#E5634D',
       },
     },
@@ -166,9 +166,9 @@ export const ThemeSupport = [
         card: '#121212',
         text: '#e5e5e7',
         border: '#272729',
-        disabled: '#cccccc', 
-        disabledText: '#888888', 
-        buttonText: '#ffffff', 
+        disabled: '#cccccc',
+        disabledText: '#888888',
+        buttonText: '#ffffff',
         danger: '#E5634D',
       },
     },
@@ -186,9 +186,9 @@ export const ThemeSupport = [
         card: '#F5F5F5',
         text: '#212121',
         border: '#c7c7cc',
-        disabled: '#cccccc', 
-        disabledText: '#888888', 
-        buttonText: '#ffffff', 
+        disabled: '#cccccc',
+        disabledText: '#888888',
+        buttonText: '#ffffff',
         danger: '#E5634D',
       },
     },
@@ -203,9 +203,9 @@ export const ThemeSupport = [
         card: '#121212',
         text: '#e5e5e7',
         border: '#272729',
-        disabled: '#cccccc', 
-        disabledText: '#888888', 
-        buttonText: '#ffffff', 
+        disabled: '#cccccc',
+        disabledText: '#888888',
+        buttonText: '#ffffff',
         danger: '#E5634D',
       },
     },
@@ -228,9 +228,9 @@ export const DefaultTheme = {
       card: '#F5F5F5',
       text: '#212121',
       border: '#c7c7cc',
-      disabled: '#cccccc', 
-      disabledText: '#888888', 
-      buttonText: '#ffffff', 
+      disabled: '#cccccc',
+      disabledText: '#888888',
+      buttonText: '#ffffff',
       danger: '#E5634D',
     },
   },
@@ -245,9 +245,9 @@ export const DefaultTheme = {
       card: '#121212',
       text: '#e5e5e7',
       border: '#272729',
-      disabled: '#cccccc', 
-      disabledText: '#888888', 
-      buttonText: '#ffffff', 
+      disabled: '#cccccc',
+      disabledText: '#888888',
+      buttonText: '#ffffff',
       danger: '#E5634D',
     },
   },
@@ -272,12 +272,20 @@ export const useTheme = () => {
   const forceDark = useSelector(state => state.application.force_dark);
   const themeStorage = useSelector(state => state.application.theme);
 
+   
+
   const theme = ThemeSupport.find(
     item => item.theme === (themeStorage ?? DefaultTheme.theme),
   );
 
-  // force the dark mode to always follow the system
-  const selectedTheme = isDarkMode ? theme.dark : theme.light;
+  // force the dark mode 
+  const selectedTheme = forceDark === true
+    ? theme.dark
+    : forceDark === false
+      ? theme.light
+      : isDarkMode
+        ? theme.dark
+        : theme.light;
 
   return {
     theme: {
